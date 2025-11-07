@@ -1,0 +1,292 @@
+.summary {
+  position: absolute;
+  top: 75%; /* ✅ centered vertically */
+  left: 50%;
+  transform: translate(-50%, -50%); /* perfectly centered */
+  background: linear-gradient(to bottom right, red, green);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  width: 70vw;
+  max-width: 700px;
+  min-width: 320px;
+  z-index: 9999;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: transform 0.5s ease-in-out;
+}
+
+.progress-count {
+    font-size: 0.9rem;
+    color: #ffffff;
+    text-align: left;
+}
+
+/* Slide the summary down */
+.summary.collapsed {
+  transform: translate(-50%, 45%);
+}
+
+/* Arrow button */
+.summary-toggle {
+  display: flex;
+  justify-content: right;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+/* Arrow rotation animation */
+.toggle-arrow {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.4s ease;
+}
+
+/* When collapsed, rotate upward */
+.toggle-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.progress-percentage {
+    font-size: 0.9rem;
+    color: #ffffff;
+    text-align: right;
+}
+
+/* Down Arrow */
+.summary-down-arrow {
+  height: 25px;
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  margin-bottom: -10px;
+}
+
+/* Section layout */
+.summary-section {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.progress-bar progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 10px;
+  appearance: none;
+  overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+  background-color: #22c55e;
+  border-radius: 10px;
+}
+
+/* Stops */
+.current-stop,
+.next-stop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stop-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stop-icon img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stop-label {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.stop-info p {
+  margin: 2px 0;
+}
+
+.stop-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #111;
+}
+
+.stop-address {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.stop-eta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #22c55e;
+}
+
+.divider hr {
+  border: none;
+  border-top: 1px solid #828282;
+}
+
+.last-updated p {
+  font-size: 0.9rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.stops-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.stops-container .summary-section {
+  flex: 1;
+}
+
+
+.stop-info {
+  font-size: 0.9rem;
+}
+
+.stop-icon img {
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 768px) {
+  .summary {
+    width: 92vw;
+    padding: 14px;
+    top: auto;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+  .summary.collapsed {
+    transform: translate(-50%, 89%);
+  }
+}
+
+/* --- Small tablets (769px – 999px) --- */
+@media (min-width: 769px) and (max-width: 999px) {
+  .summary {
+    width: 65vw;
+    max-width: 700px;
+    left: 50%;                  /* center over map column */
+    transform: translate(-50%, -50%);
+  }
+  .summary.collapsed {
+    transform: translate(-50%, 45%);
+  }
+}
+
+/* --- Mid-range (1000px – 1200px) --- */
+@media (min-width: 1000px) and (max-width: 1200px) {
+  .summary {
+    width: 60vw;
+    max-width: 750px;
+    left: 50%;                  /* keep centered */
+    transform: translate(-50%, -50%);
+  }
+  .summary.collapsed {
+    transform: translate(-50%, 45%);
+  }
+}
+
+/* --- Stack current/next stops vertically below 1024px --- */
+@media (max-width: 1024px) {
+  .stops-container {
+    flex-direction: column !important;
+    gap: 12px;
+  }
+  .stop-icon {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+  .stop-label {
+    font-size: 0.85rem;
+  }
+  .stop-info {
+    margin-top: 6px;
+  }
+}
+
+/* --- Improved stop layout --- */
+.current-stop,
+.next-stop {
+  display: flex;
+  flex-direction: column; /* stack label/info vertically */
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Row for icon + label */
+.stop-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Make stop info full-width below the row */
+.stop-info {
+  width: 100%;
+}
+
+/* Adjust icon and label */
+.stop-icon img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stop-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .summary {
+    width: 80%;        /* leave some space on left and right */
+    max-width: 750px;  /* optional cap */
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .summary.collapsed {
+    transform: translate(-50%, 35%); /* slightly pulled up */
+  }
+}

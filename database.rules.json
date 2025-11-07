@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "bus": {
+      ".read": true,           
+      ".write": false          
+    },
+    "stops": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}
