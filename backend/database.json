@@ -1,0 +1,212 @@
+{
+    "stops": {
+        "0" :{
+            "families": {
+                "100": "Rev. Sam K. Easow and Bincy Kochamma"
+            },
+            "address": "2934 Dawn Haven Lane, Pearland TX 77584",
+            "latitude": 29.5564378,
+            "longitude": -95.4303598,
+            "Arrived": null,
+            "Departure": null, 
+            "starting_time": "7:00 PM"
+        },
+        "1" : {
+            "families": {
+                "181": "Abraham and Sosamma Abraham (Kunjumon & Gracie)"
+            },
+            "address": "3104 Decker Field Lane, Pearland TX 77584",
+            "latitude": 29.5534254,
+            "longitude": -95.4144842,
+            "Arrived": null,
+            "Departure": null
+        },
+        "2" : {
+            "families": {
+                "553": "Benny Mathew and Mini Benny (Benny & Mini)"
+            },
+            "address": "3410 Eden Cove Lane, Pearland TX 77584",
+            "latitude": 29.5451241,
+            "longitude": -95.4103888,
+            "Arrived": null,
+            "Departure": null
+        },
+        "3" : {
+            "families": {
+                "542": "Jay and Beji Jacob (Jojy & Beji)"
+            },
+            "address": "3205 Iris Trail Lane, Pearland TX 77584",
+            "latitude": 29.551819,
+            "longitude": -95.431197,
+            "Arrived": null,
+            "Departure": null
+        },
+        "4" : {
+            "families": {
+                "317": "Jacob and Shiby Zachariah (Shibu & Shiby)"
+            },
+            "address": "13218 Laguna Shores Drive, Pearland TX 77584",
+            "latitude": 29.5730242,
+            "longitude": -95.4253552,
+            "Arrived": null,
+            "Departure": null
+        },
+        "5" : {
+            "families": {
+                "316": "Thomas and Reena Abraham (Saji & Reena)"
+            },
+            "address": "13108 Indigo Bay Court, Pearland TX 77584",
+            "latitude": 29.56603,
+            "longitude": -95.4238358,
+            "Arrived": null,
+            "Departure": null
+        },
+        "6" : {
+            "families": {
+                "238": "Daniel and Mary Zachariah (Achenkunju & Valsa)"
+            },
+            "address": "2712 White Falls Drive, Pearland TX 77584",
+            "latitude": 29.5613685,
+            "longitude": -95.4278594,
+            "Arrived": null,
+            "Departure": null
+        },
+        "7" : {
+            "families": {
+                "260": "Thayyil J. and Sheeba Jose (Jose & Sheeba)"
+            },
+            "address": "12001 Opal Creek Drive, Pearland TX 77584",
+            "latitude": 29.5629134,
+            "longitude": -95.4061056,
+            "Arrived": null,
+            "Departure": null
+        },
+        "8" : {
+            "families": {
+                "346": "Joseph M. and Goldy George (Jojoe & Goldy)"
+            },
+            "address": "2404 Delta Bridge Drive, Pearland TX 77584",
+            "latitude": 29.5678475,
+            "longitude": -95.4065697,
+            "Arrived": null,
+            "Departure": null
+        },
+        "9" : {
+            "families": {
+                "409": "Thomas Mathew and Jolly Thomas (Jeemon & Jolly)"
+            },
+            "address": "2221 Shore Creek Drive, Pearland TX 77584",
+            "latitude": 29.5700249,
+            "longitude": -95.4035312,
+            "Arrived": null,
+            "Departure": null
+        },
+        "10" : {
+            "families": {
+                "388": "Alex Pappachan and Giji Alex (Sabu & Giji)"
+            },
+            "address": "2014 Mountain Creek Street, Pearland TX 77584",
+            "latitude": 29.5733029,
+            "longitude": -95.4013018,
+            "Arrived": null,
+            "Departure": null
+        },
+        "11" : {
+            "families": {
+                "389": "Binu and Seby Yohannan (Binu & Seby)"
+            },
+            "address": "11603 Summer Moon Drive, Pearland TX 77584",
+            "latitude": 29.5646828,
+            "longitude": -95.3991628,
+            "Arrived": null,
+            "Departure": null
+        },
+        "12" : {
+            "families": {
+                "194": "Muttathu Lukose. and Mariamma (Aniyankunju & Alice)"
+            },
+            "address": "11301 Soft Breeze Court, Pearland TX 77584",
+            "latitude": 29.5658702,
+            "longitude": -95.394439,
+            "Arrived": null,
+            "Departure": null
+        },
+        "13" :{
+            "families": {
+                "366": "Reji Thomas and Sherry Reji (Reji & Sherry)"
+            },
+            "address": "2504 Still Bay Street, Pearland TX 77584",
+            "latitude": 29.5653508,
+            "longitude": -95.3976002,
+            "Arrived": null,
+            "Departure": null
+        },
+        "14" : {
+            "families": {
+                "369": "V. K. John and Valsamma John (Babu & Valsa)"
+            },
+            "address": "11305 Sailwing Creek Court, Pearland TX 77584",
+            "latitude": 29.5651614,
+            "longitude": -95.3947646,
+            "Arrived": null,
+            "Departure": null
+        },
+        "15" :{
+            "families": {
+                "538": "Sujit George and Cicil Zaina Emmatty (Sujit & Cicil)"
+            },
+            "address": "11310 Misty Morning Street, Pearland TX 77584",
+            "latitude": 29.5663476,
+            "longitude": -95.3953124,
+            "Arrived": null,
+            "Departure": null
+        },
+        "16" :{
+            "families": {
+                "123": "P. I. Varughese and Annamma (Thankachan & Annie)"
+            },
+            "address": "11301 Enclave Lake Lane, Pearland TX 77584",
+            "latitude": 29.5723884,
+            "longitude": -95.3936364,
+            "Arrived": null,
+            "Departure": null
+        },
+        "17" : {
+            "families": {
+                "480": "Reji Thomas and Anisha Scaria (Boston Reji & Anisha)"
+            },
+            "address": "12606 Floral Park Lane, Pearland TX 77584",
+            "latitude": 29.5445639,
+            "longitude": -95.4161839,
+            "Arrived": null,
+            "Departure": null
+        },
+        "18" : {
+            "families": {
+                "214": "M. Georgekutty and Thankamma (Georgekutty & Mani)"
+            },
+            "address": "2816 Green Mountain Drive, Pearland TX 77584",
+            "latitude": 29.5588742,
+            "longitude": -95.436017,
+            "Arrived": null,
+            "Departure": null
+        },
+        "19" : {
+            "families": {
+                "391": "Joseph George and Daisy George (Raju & Daisy)"
+            },
+            "address": "11313 Enclave Lake Lane, Pearland TX 77584",
+            "latitude": 29.5736749,
+            "longitude": -95.3937527,
+            "Arrived": null,
+            "Departure": null
+        }
+    },
+    "nextStopId": 20,
+    "tripStarted": false, 
+    "currentStop": -1,
+    "nextStop": 0,
+    "busLocation": { "lat": 29.619707, "lng": -95.3193855 },
+    "status": "idle",
+    "lastUpdate": 1700000000
+}
