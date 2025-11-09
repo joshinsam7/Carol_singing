@@ -18,21 +18,14 @@ const wss = new WebSocket.Server({ server });
 
 // --- Middleware ---db.
 app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = [
-      "http://localhost:3000",
-      "https://carol-tracker.onrender.com"
-    ];
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: [
+    "http://localhost:3000",               
+    "https://carol-tracker.onrender.com"  
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+app.use(bodyParser.json());
 
 // --- Load stops from JSON if empty ---
 function loadStopsIfEmpty() {
@@ -80,7 +73,7 @@ app.post("/api/bus-location", (req, res) => {
   const { lat, lon } = req.body;
   if (lat == null || lon == null) {
     return res.status(400).json({ success: false, message: "Invalid lat/lon", received: req.body });
-  }
+ }
 
   const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
 
@@ -171,4 +164,4 @@ wss.on("connection", (ws) => {
 
 // --- Start server ---
 const PORT = process.env.PORT;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
