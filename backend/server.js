@@ -9,7 +9,7 @@ const path = require("path");
 
 require('dotenv').config();
 
-const db = require("./database.js"); // use single database.js instance
+const db = require("./database.js");
 
 
 const app = express();
