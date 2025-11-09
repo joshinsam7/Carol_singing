@@ -23,8 +23,8 @@ function App() {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [routeETA, setRouteETA] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API || "http://localhost:3001";
-  const {data: busData} = useBusSocket(process.env.REACT_APP_SOCKET || "ws://localhost:3001");
+  const API_URL = process.env.REACT_APP_API; // || "http://localhost:3001"
+  const {data: busData} = useBusSocket(process.env.REACT_APP_SOCKET); // "ws://localhost:3001");
 
   // ------------------- Fetch stops -------------------
   useEffect(() => {

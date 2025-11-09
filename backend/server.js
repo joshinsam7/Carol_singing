@@ -102,9 +102,6 @@ app.post("/api/bus-location", (req, res) => {
   res.json({ success: true, busLocation: updatedBusState });
 });
 
-
-
-
 // Get all stops
 app.get("/api/getStops", (req, res) => {
   const stops = db.prepare("SELECT * FROM stops ORDER BY id").all();
