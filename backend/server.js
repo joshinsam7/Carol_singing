@@ -13,14 +13,20 @@ const db = require("./database.js"); // use single database.js instance
 
 
 const app = express();
+
+
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 // --- Middleware ---db.
 app.use(cors({
   origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"]
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
+
+app.use(express.json()); // <--- add this
+app.use(bodyParser.urlencoded({ extended: true })); // optional for form data
 
 // --- Load stops from JSON if empty ---
 function loadStopsIfEmpty() {
