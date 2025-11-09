@@ -29,7 +29,8 @@ export default function useBusSocket(socketUrl) {
       ws.onmessage = (event) => {
         try {
           const parsed = JSON.parse(event.data);
-          setData(parsed);
+          console.log("📩 WS message received:", parsed);
+          setData(parsed); // parsed = { type: "bus_update" | "trip_started" | "stop_update", data: {...} }
         } catch (err) {
           console.error("Failed to parse WS message:", err);
         }
@@ -51,10 +52,8 @@ export default function useBusSocket(socketUrl) {
     };
 
     connect();
-
     return () => wsRef.current?.close(); // ✅ consistent cleanup
   }, [socketUrl]);
-
 
   return {data, connected};
 }

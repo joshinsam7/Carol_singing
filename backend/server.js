@@ -61,18 +61,42 @@ function broadcastUpdate(payload) {
 
 // Bus location update
 app.post("/api/bus-location", (req, res) => {
-  const { lat, lng } = req.body;
-  if (lat == null || lng == null)
-    return res.status(400).json({ success: false, message: "Invalid lat/lng" });
+  console.log("📩 Incoming payload:", req.body);
 
-  db.prepare(
-    `UPDATE bus_info SET lat=?, lng=?, trip_started=1, last_update=? WHERE id=1`
-  ).run(lat, lng, Date.now());
+  const { lat, lon } = req.body;
+  if (lat == null || lon == null) {
+    return res.status(400).json({ success: false, message: "Invalid lat/lon", received: req.body });
+  }
 
   const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
-  broadcastUpdate({ type: "bus_update", data: busState });
-  res.json({ success: true, busLocation: busState });
+
+  // 🚀 Detect first data (trip not started)
+  const tripJustStarted = !busState.trip_started;
+
+  // Update location + mark started
+  db.prepare(`
+    UPDATE bus_info 
+    SET lat=?, lng=?, trip_started=1, last_update=? 
+    WHERE id=1
+  `).run(lat, lon, Date.now());
+
+  console.log("✅ Latitude:", lat, "Longitude:", lon);
+
+  // Fetch the updated row
+  const updatedBusState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
+
+  // 🔔 Broadcast
+  if (tripJustStarted) {
+    broadcastUpdate({ type: "trip_started", data: updatedBusState });
+  } else {
+    broadcastUpdate({ type: "bus_update", data: updatedBusState });
+  }
+
+  res.json({ success: true, busLocation: updatedBusState });
 });
+
+
+
 
 // Get all stops
 app.get("/api/getStops", (req, res) => {

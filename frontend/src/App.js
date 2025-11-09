@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable camelcase */
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 import React, {useEffect, useState} from "react";
@@ -33,6 +35,23 @@ function App() {
         .then((data) => setStops(data.stops || []))
         .catch((err) => console.error("Failed to fetch stops:", err));
   }, [API_URL]);
+
+  const [tripStarted, setTripStarted] = useState(false);
+
+  useEffect(() => {
+    if (!busData?.data) return;
+
+    const {lat, lng, status, currentStop: csId, nextStop: nsId, lastUpdate: lu, trip_started} = busData.data;
+
+    if (trip_started && !tripStarted) setTripStarted(true); // mark when it first starts
+
+    setBusStatus(status || "idle");
+    setCurrentStop(csId != null ? stopsMap.get(csId) || null : null);
+    setNextStop(nsId != null ? stopsMap.get(nsId) || null : null);
+    setCurrentLocation({lat: lat ?? 29.619707, lng: lng ?? -95.3193855});
+    setLastUpdate(lu ? new Date(lu).toLocaleTimeString() : null);
+  }, [busData, stops]);
+
 
   // ------------------- Handle WebSocket bus data -------------------
   useEffect(() => {
@@ -78,7 +97,9 @@ function App() {
             destinationStop={nextStop || {}}
             busStatus={busStatus}
             setRouteETA={setRouteETA}
+            tripStarted={tripStarted}
           />
+
 
           <Summary
             data={stops}

@@ -30,12 +30,10 @@ export default function Information({data, nextStop}) {
             </div>
           </div>
 
-          {/* Info Text */}
+          {/* Info Text - stacked vertically */}
           <div className="info-body">
-            {/* Heading */}
             <p className="info-title">{`Stop ${index + 1}`}</p>
 
-            {/* Address */}
             <p className="info-line">
               📍{" "}
               <a
@@ -50,21 +48,19 @@ export default function Information({data, nextStop}) {
               </a>
             </p>
 
-            {/* Times */}
             {index === 0 && item.starting_time && (
               <p className="info-line">Starting Time: {item.starting_time}</p>
             )}
 
             {item.Arrived && (
-              <div className="info-line">
-                {item.arrival_time && <span>Arriving: {item.arrival_time} </span>}
-                {item.departure_time && (
-                  <span style={{marginLeft: "8px"}}>Departing: {item.departure_time}</span>
-                )}
-              </div>
+              <p className="info-line">
+                ⏰ {item.arrival_time && `Arriving: ${item.arrival_time}`}{" "}
+                {item.departure_time && `| Departing: ${item.departure_time}`}
+              </p>
             )}
           </div>
         </div>
+
       ))}
     </div>
   );
