@@ -44,6 +44,22 @@ function loadStopsIfEmpty() {
 }
 loadStopsIfEmpty();
 
+// --- Print out the database contents for debugging ---
+try {
+  const stops = db.prepare("SELECT * FROM stops").all();
+  const busInfo = db.prepare("SELECT * FROM bus_info").all();
+
+  console.log("\n================= 🗺️ Stops Table =================");
+  console.table(stops);
+
+  console.log("\n================= 🚌 Bus Info Table ================");
+  console.table(busInfo);
+
+  console.log("==================================================\n");
+} catch (err) {
+  console.error("❌ Error reading database:", err);
+}
+
 // --- Cache stops ---
 const cachedStops = db.prepare("SELECT * FROM stops ORDER BY id").all();
 function getStopById(id) {
