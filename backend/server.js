@@ -17,7 +17,14 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 // --- Middleware ---db.
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({
+  origin: [
+    "http://localhost:3000",               
+    "https://carol-tracker.onrender.com"  
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 // --- Load stops from JSON if empty ---
