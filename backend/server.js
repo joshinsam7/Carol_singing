@@ -1,4 +1,3 @@
-
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
@@ -8,25 +7,16 @@ const fs = require("fs");
 const path = require("path");
 
 require('dotenv').config();
-
 const db = require("./database.js");
 
-
 const app = express();
-
-
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// --- Middleware ---db.
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
-
-app.use(express.json()); // <--- add this
-app.use(bodyParser.urlencoded({ extended: true })); // optional for form data
+// --- Middleware ---
+app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE"], credentials: true }));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // --- Load stops from JSON if empty ---
 function loadStopsIfEmpty() {
@@ -49,19 +39,37 @@ function loadStopsIfEmpty() {
         JSON.stringify(s.families || {})
       );
     }
-
     console.log(`Inserted ${Object.keys(stopsData.stops).length} stops into the database.`);
   }
 }
 loadStopsIfEmpty();
 
+// --- Cache stops ---
+const cachedStops = db.prepare("SELECT * FROM stops ORDER BY id").all();
+function getStopById(id) {
+  return cachedStops.find(s => s.id === id) || null;
+}
+
 // --- WebSocket Broadcast ---
-function broadcastUpdate(payload) {
-  const message = JSON.stringify(payload);
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
+function broadcastBusState() {
+  const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
+  const payload = {
+    type: "bus_update",
+    data: {
+      status: busState.status,
+      current_stop: busState.status === 'idle' ? busState.current_stop : null,
+      destination_stop: busState.destination_stop_override ?? busState.destination_stop,
+      lat: busState.lat,
+      lng: busState.lng,
+      last_update: busState.last_update,
     }
+  };
+
+  const message = JSON.stringify(payload);
+  console.log(message);
+
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) client.send(message);
   });
 }
 
@@ -69,44 +77,38 @@ function broadcastUpdate(payload) {
 
 // Bus location update
 app.post("/api/bus-location", (req, res) => {
-  console.log("📩 Incoming payload:", req.body);
-
   const { lat, lon } = req.body;
-  if (lat == null || lon == null) {
-    return res.status(400).json({ success: false, message: "Invalid lat/lon", received: req.body });
-  }
+  if (lat == null || lon == null) return res.status(400).json({ success: false });
 
   const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
-
-  // 🚀 Detect first data (trip not started)
   const tripJustStarted = !busState.trip_started;
 
-  // Update location + mark started
   db.prepare(`
     UPDATE bus_info 
-    SET lat=?, lng=?, trip_started=1, last_update=? 
+    SET lat=?, lng=?, last_update=?, trip_started=1
     WHERE id=1
   `).run(lat, lon, Date.now());
 
-  console.log("✅ Latitude:", lat, "Longitude:", lon);
-
-  // Fetch the updated row
-  const updatedBusState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
-
-  // 🔔 Broadcast
-  if (tripJustStarted) {
-    broadcastUpdate({ type: "trip_started", data: updatedBusState });
-  } else {
-    broadcastUpdate({ type: "bus_update", data: updatedBusState });
+  if (tripJustStarted && cachedStops.length > 0) {
+    // First post → set destination_stop to first stop
+    db.prepare(`
+      UPDATE bus_info
+      SET status='en_route',
+          current_stop=NULL,
+          destination_stop=?
+      WHERE id=1
+    `).run(cachedStops[0].id);
   }
 
-  res.json({ success: true, busLocation: updatedBusState });
+  broadcastBusState();
+  res.json({ success: true });
 });
+
+
 
 // Get all stops
 app.get("/api/getStops", (req, res) => {
-  const stops = db.prepare("SELECT * FROM stops ORDER BY id").all();
-  res.json({ stops });
+  res.json({ stops: cachedStops });
 });
 
 // Get current bus state
@@ -117,52 +119,94 @@ app.get("/api/bus-state", (req, res) => {
 
 // --- Stop Arrived ---
 app.post("/api/stop-arrived", (req, res) => {
-  const { stopId, timestamp, nextStopId } = req.body;
-  if (stopId == null || !timestamp)
-    return res.status(400).json({ success: false, message: "stopId and timestamp are required" });
+  const { stopId, timestamp } = req.body;
+  if (!stopId || !timestamp) return res.status(400).json({ success: false });
 
+  // Mark the stop as arrived in stops table
   db.prepare("UPDATE stops SET arrived=? WHERE id=?").run(timestamp, stopId);
 
-  // Update bus_info: idle + currentStop + nextStop
-  const nextStop = nextStopId != null ? nextStopId : stopId + 1;
-  db.prepare(
-    `UPDATE bus_info SET status='idle', current_stop=?, next_stop_id=? WHERE id=1`
-  ).run(stopId, nextStop);
+  // Update bus state
+  const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
+  const nextStop = busState.destination_stop_override ?? busState.destination_stop;
 
-  const stop = db.prepare("SELECT * FROM stops WHERE id=?").get(stopId);
-  broadcastUpdate({ type: "stop_update", data: stop });
-  res.json({ success: true, stop, nextStop });
+  db.prepare(`
+    UPDATE bus_info
+    SET status='idle',
+        current_stop=?,
+        destination_stop=?,
+        waiting_for_approval=1
+    WHERE id=1
+  `).run(stopId, nextStop);
+
+  broadcastBusState();
+  res.json({ success: true });
 });
 
 // --- Stop Departed ---
 app.post("/api/stop-departed", (req, res) => {
-  const { stopId, timestamp, nextStopId } = req.body;
-  if (stopId == null || !timestamp)
-    return res.status(400).json({ success: false, message: "stopId and timestamp are required" });
+  const { stopId, timestamp } = req.body;
+  if (!stopId || !timestamp) return res.status(400).json({ success: false });
 
+  // Mark the stop as departed in stops table
   db.prepare("UPDATE stops SET departed=? WHERE id=?").run(timestamp, stopId);
 
-  const nextStop = nextStopId != null ? nextStopId : stopId + 1;
-  db.prepare(
-    `UPDATE bus_info SET status='en route', next_stop_id=? WHERE id=1`
-  ).run(nextStop);
+  // Determine next stop
+  const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
+  const nextStop = busState.destination_stop_override ?? (() => {
+    const currentIndex = cachedStops.findIndex(s => s.id === stopId);
+    return cachedStops[currentIndex + 1]?.id || null;
+  })();
 
-  const stop = db.prepare("SELECT * FROM stops WHERE id=?").get(stopId);
-  broadcastUpdate({ type: "stop_update", data: stop });
-  res.json({ success: true, stop, nextStop });
+  db.prepare(`
+    UPDATE bus_info
+    SET status='en_route',
+        current_stop=NULL,
+        destination_stop=?,
+        destination_stop_override=NULL,
+        waiting_for_approval=0
+    WHERE id=1
+  `).run(nextStop);
+
+  broadcastBusState();
+  res.json({ success: true });
 });
 
-// --- WebSocket connection ---
+// Admin can override next stop
+app.post("/api/set-next-stop", (req, res) => {
+  const { nextStopId } = req.body;
+  if (!nextStopId) return res.status(400).json({ success: false, error: "Missing nextStopId" });
+
+  db.prepare(`
+    UPDATE bus_info
+    SET destination_stop_override = ?
+    WHERE id=1
+  `).run(nextStopId);
+
+  broadcastBusState();
+  res.json({ success: true, next_stop_id: nextStopId });
+});
+
+// Ping endpoint
+app.get("/ping", (req, res) => res.send("ok"));
+
+// WebSocket connection
 wss.on("connection", (ws) => {
   console.log("Client connected via WebSocket");
 
-  // Send current bus state
   const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
-  ws.send(JSON.stringify({ type: "bus_update", data: busState }));
+  ws.send(JSON.stringify({
+    type: "bus_update",
+    data: {
+      status: busState.status,
+      at_stop: busState.status === 'idle' ? busState.current_stop : null,
+      destination_stop: busState.destination_stop,
+      last_update: busState.last_update
+    }
+  }));
 
   ws.on("close", () => console.log("Client disconnected"));
 });
 
-// --- Start server ---
-const PORT = process.env.PORT;
+// Start server
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

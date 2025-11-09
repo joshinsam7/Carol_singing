@@ -1,10 +1,14 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-import React, {useEffect, useState} from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable camelcase */
+/* eslint-disable max-len */
+/* eslint-disable require-jsdoc */
+import React, {useEffect, useState, useMemo} from "react";
 import "./App.css";
-import BusMap from "./components/BusMap.js";
+import BusMap from "./components/BusMap";
 import {Header} from "./components/header";
 import Information from "./components/Information";
 import Summary from "./components/summary";
@@ -12,73 +16,136 @@ import {Helmet} from "react-helmet-async";
 import SnowParticles from "./components/SnowFlakes";
 import useBusSocket from "./hooks/useBusSocket";
 
+const MemoizedInformation = React.memo(Information);
+const MemoizedSummary = React.memo(Summary);
+
 function App() {
-  // ------------------- State -------------------
   const [stops, setStops] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
-  const [busStatus, setBusStatus] = useState("idle");
-  const [currentLocation, setCurrentLocation] = useState({lat: 29.619707, lng: -95.3193855});
-  const [currentStop, setCurrentStop] = useState(null);
-  const [nextStop, setNextStop] = useState(null);
-  const [lastUpdate, setLastUpdate] = useState(null);
-  const [routeETA, setRouteETA] = useState(null);
+  const [tripStarted, setTripStarted] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API; // || "http://localhost:3001"
-  const {data: busData} = useBusSocket(process.env.REACT_APP_SOCKET); // "ws://localhost:3001");
+  const [busInfo, setBusInfo] = useState({
+    status: "idle",
+    currentLocation: {lat: 29.619707, lng: -95.3193855},
+    atStop: null,
+    destinationStop: null,
+    lastUpdate: null,
+    routeETA: null,
+    waitingForApproval: false,
+  });
 
-  // ------------------- Fetch stops -------------------
+  const API_URL = process.env.REACT_APP_API;
+  const busData = useBusSocket(stops); // now returns simplified state
+
+  // Fetch stops
   useEffect(() => {
-    if (!API_URL) return console.warn("API URL is not defined in environment variables.");
-
+    if (!API_URL) return;
     fetch(`${API_URL}/api/getStops`)
         .then((res) => res.json())
         .then((data) => setStops(data.stops || []))
-        .catch((err) => console.error("Failed to fetch stops:", err));
+        .catch((err) => console.error(err));
   }, [API_URL]);
 
-  const [tripStarted, setTripStarted] = useState(false);
+  // Create map for fast lookup
+  const stopsMap = useMemo(() => {
+    const map = new Map();
+    stops.forEach((s) => s?.id != null && map.set(s.id, s));
+    return map;
+  }, [stops]);
 
+  // Handle WebSocket updates
   useEffect(() => {
-    if (!busData?.data) return;
+    if (!busData || stops.length === 0) return;
 
-    const {lat, lng, status, currentStop: csId, nextStop: nsId, lastUpdate: lu, trip_started} = busData.data;
+    const {lat, lng, status, current_stop, destination_stop, last_update} = busData;
 
-    if (trip_started && !tripStarted) setTripStarted(true); // mark when it first starts
+    if (!tripStarted && status !== "idle") setTripStarted(true);
 
-    setBusStatus(status || "idle");
-    setCurrentStop(csId != null ? stopsMap.get(csId) || null : null);
-    setNextStop(nsId != null ? stopsMap.get(nsId) || null : null);
-    setCurrentLocation({lat: lat ?? 29.619707, lng: lng ?? -95.3193855});
-    setLastUpdate(lu ? new Date(lu).toLocaleTimeString() : null);
-  }, [busData, stops]);
+    const atStopObj = current_stop ? stopsMap.get(current_stop) : null;
+    const destinationStopObj = destination_stop ? stopsMap.get(destination_stop) : null;
+
+    // Only update bus position if lat/lng exist
+    const currentLocation =
+      lat != null && lng != null ? {lat, lng} : busInfo.currentLocation;
+
+    setBusInfo({
+      status: status || "idle",
+      currentLocation,
+      atStop: atStopObj,
+      destinationStop: destinationStopObj,
+      lastUpdate: last_update ? new Date(last_update).toLocaleTimeString() : null,
+      waitingForApproval: status === "idle" ? true : false,
+      routeETA: null,
+    });
+  }, [busData, stops, stopsMap, tripStarted]);
 
 
-  // ------------------- Handle WebSocket bus data -------------------
-  useEffect(() => {
-    if (!busData?.data || stops.length === 0) return;
+  // ------------------- OSRM-based ETA -------------------
+  const calculateETA = async (fromLocation, toStop) => {
+    if (!fromLocation || !toStop) return null;
+    try {
+      const url = `http://router.project-osrm.org/route/v1/driving/${fromLocation.lng},${fromLocation.lat};${toStop.longitude},${toStop.latitude}?overview=false`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data?.routes?.[0]?.duration != null) return data.routes[0].duration;
+    } catch (err) {
+      console.error("OSRM ETA calculation failed:", err);
+    }
+    return null;
+  };
 
-    // Build stops map here, only when busData or stops change
-    const stopsMap = new Map();
-    stops.forEach((s) => s?.id != null && stopsMap.set(s.id, s));
+  // ------------------- Admin confirms bus departed -------------------
+  const onAdminDepartStop = async (nextStopId) => {
+    const nextStop = stopsMap.get(nextStopId);
+    if (!nextStop) return;
 
-    const {lat, lng, status, currentStop: csId, nextStop: nsId, lastUpdate: lu} = busData.data;
+    setBusInfo((prev) => ({
+      ...prev,
+      atStop: null, // bus leaving current stop
+      destinationStop: nextStop,
+      routeETA: null,
+    }));
 
-    setBusStatus(status || "idle");
-    setCurrentStop(csId != null ? stopsMap.get(csId) || null : null);
-    setNextStop(nsId != null ? stopsMap.get(nsId) || null : null);
-    setCurrentLocation({lat: lat ?? 29.619707, lng: lng ?? -95.3193855});
-    setLastUpdate(lu ? new Date(lu).toLocaleTimeString() : null);
-  }, [busData, stops]);
+    const eta = await calculateETA(busInfo.currentLocation, nextStop);
+    if (eta != null) {
+      setBusInfo((prev) => ({...prev, routeETA: eta}));
+    }
+  };
 
-  // ------------------- Compute sorted stops -------------------
-  const sortedStops = nextStop ?
-    [nextStop, ...stops.filter((s) => s.id !== nextStop.id)] :
-    stops;
+  const nextStopObj = (() => {
+    if (!busInfo.destinationStop || stops.length === 0) return null;
 
-  // ------------------- Toggle Info -------------------
+    // Admin override
+    if (busInfo.nextStopOverride != null) {
+      return stops.find((s) => s.id === busInfo.nextStopOverride) || null;
+    }
+
+    // Default: next stop is the stop after destinationStop in stops array
+    const destIndex = stops.findIndex((s) => s.id === busInfo.destinationStop.id);
+    if (destIndex >= 0 && destIndex < stops.length - 1) {
+      return stops[destIndex + 1];
+    }
+
+    // No next stop
+    return null;
+  })();
+
   const toggleInfo = () => setShowInfo((prev) => !prev);
 
-  // ------------------- Render -------------------
+  // Called when bus arrives at a stop
+  const onAdminArrived = (stopId) => {
+    const arrivedStop = stopsMap.get(stopId);
+    if (!arrivedStop) return;
+
+    setBusInfo((prev) => ({
+      ...prev,
+      atStop: arrivedStop,
+      status: "idle",
+      routeETA: null,
+      waitingForApproval: true,
+    }));
+  };
+
   return (
     <div className="App">
       <SnowParticles />
@@ -93,26 +160,37 @@ function App() {
         <section className="map-column" style={{position: "relative"}}>
           <BusMap
             data={stops}
-            currentLocation={currentLocation}
-            destinationStop={nextStop || {}}
-            busStatus={busStatus}
-            setRouteETA={setRouteETA}
+            stopsMap={stopsMap}
+            currentLocation={busInfo.currentLocation}
+            destinationStop={busInfo.destinationStop}
+            nextDestinationStop={nextStopObj}
+            busStatus={busInfo.status}
+            setRouteETA={(eta) => setBusInfo((prev) => ({...prev, routeETA: eta}))}
             tripStarted={tripStarted}
           />
 
-
-          <Summary
+          <MemoizedSummary
             data={stops}
-            nextStop={nextStop}
-            currentStop={currentStop}
-            lastUpdate={lastUpdate}
-            currentLocation={currentLocation}
-            routeETA={routeETA}
+            stopsMap={stopsMap}
+            currentStop={busInfo.atStop}
+            currentDestination={busInfo.destinationStop}
+            nextStop={nextStopObj} // ✅ now a proper stop object
+            lastUpdate={busInfo.lastUpdate}
+            currentLocation={busInfo.currentLocation}
+            routeETA={busInfo.routeETA}
+            busStatus={busInfo.status}
+            waitingForApproval={busInfo.waitingForApproval}
           />
+
         </section>
 
         <aside className={`side right ${showInfo ? "open" : ""}`}>
-          <Information data={sortedStops} nextStop={nextStop} />
+          <MemoizedInformation
+            data={stops}
+            currentStop={busInfo.atStop}
+            destinationStop={busInfo.destinationStop}
+            waitingForApproval={busInfo.waitingForApproval}
+          />
         </aside>
       </main>
     </div>

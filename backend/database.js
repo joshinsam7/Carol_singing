@@ -8,10 +8,12 @@ CREATE TABLE IF NOT EXISTS bus_info (
     id INTEGER PRIMARY KEY,
     lat REAL NOT NULL,
     lng REAL NOT NULL,
-    next_stop_id INTEGER DEFAULT 0,
+    current_stop INTEGER DEFAULT NULL,           -- stop where bus is currently at
+    destination_stop INTEGER DEFAULT NULL,       -- stop where bus is heading
+    destination_stop_override INTEGER DEFAULT NULL, -- admin can override next stop
     trip_started INTEGER DEFAULT 0,
-    current_stop INTEGER DEFAULT -1,
-    status TEXT DEFAULT 'idle',
+    status TEXT DEFAULT 'idle',                  -- 'idle' or 'en_route'
+    waiting_for_approval INTEGER DEFAULT 0,
     last_update INTEGER DEFAULT 0
 );
 
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS stops (
     tag TEXT
 );
 `);
+
 
 // Ensure a single row exists for bus_info
 const row = db.prepare("SELECT COUNT(*) AS count FROM bus_info").get();

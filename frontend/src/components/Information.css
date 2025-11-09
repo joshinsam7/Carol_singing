@@ -145,3 +145,22 @@
   font-weight: bold;
   font-size: 16px;
 }
+
+/* --- Enroute (next stop) highlight --- */
+.enroute-card {
+  background-color: #fff7e6; /* soft orange background */
+  border-left: 4px solid #ffa500;
+}
+
+.enroute-circle {
+  width: 36px;
+  height: 36px;
+  background-color: #ffa500; /* orange circle */
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}

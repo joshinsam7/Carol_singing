@@ -1,59 +1,55 @@
+/* eslint-disable camelcase */
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-// src/hooks/useBusWebSocket.js
 import {useEffect, useState, useRef} from "react";
 
-export default function useBusSocket(socketUrl) {
-  const [data, setData] = useState(null);
-  const [connected, setConnected] = useState(false);
-  const wsRef = useRef(null);
-  const retryRef = useRef(0);
+export default function useBusSocket(stops) {
+  const [busState, setBusState] = useState({
+    status: "idle",
+    at_stop: null,
+    destination_stop: null,
+    lat: null,
+    lng: null,
+    last_update: null,
+  });
+
+  const ws = useRef(null);
+
+  // keep latest stops reference
+  const stopsRef = useRef(stops);
+  useEffect(() => {
+    stopsRef.current = stops;
+  }, [stops]);
 
   useEffect(() => {
-    if (!socketUrl) {
-      console.warn("WebSocket URL is undefined");
-      return () => {};
-    }
+    ws.current = new WebSocket(process.env.REACT_APP_SOCKET);
 
-    const connect = () => {
-      console.log(`🔌 Attempting WS connection to: ${socketUrl}`);
-      const ws = new WebSocket(socketUrl);
-      wsRef.current = ws;
+    ws.current.onopen = () => console.log("WebSocket connected");
+    ws.current.onclose = () => console.log("WebSocket disconnected");
 
-      ws.onopen = () => {
-        console.log("✅ Connected to WebSocket server");
-        setConnected(true);
-        retryRef.current = 0;
-      };
+    ws.current.onmessage = (msg) => {
+      try {
+        const parsed = JSON.parse(msg.data);
+        if (parsed.type === "bus_update") {
+          const {status, at_stop, destination_stop, lat, lng, last_update} = parsed.data;
 
-      ws.onmessage = (event) => {
-        try {
-          const parsed = JSON.parse(event.data);
-          console.log("📩 WS message received:", parsed);
-          setData(parsed); // parsed = { type: "bus_update" | "trip_started" | "stop_update", data: {...} }
-        } catch (err) {
-          console.error("Failed to parse WS message:", err);
+          // ✅ Always trust backend coordinates for actual bus position
+          setBusState({
+            status,
+            at_stop,
+            destination_stop,
+            lat,
+            lng,
+            last_update,
+          });
         }
-      };
-
-      ws.onclose = () => {
-        console.log("❌ WebSocket disconnected");
-        setConnected(false);
-        const delay = Math.min(1000 * 2 ** retryRef.current, 10000);
-        console.log(`Retrying WS in ${delay / 1000}s`);
-        retryRef.current += 1;
-        setTimeout(connect, delay);
-      };
-
-      ws.onerror = (err) => {
-        console.error("WebSocket error:", err);
-        ws.close();
-      };
+      } catch (err) {
+        console.error("WebSocket parsing error:", err);
+      }
     };
 
-    connect();
-    return () => wsRef.current?.close(); // ✅ consistent cleanup
-  }, [socketUrl]);
+    return () => ws.current?.close();
+  }, []);
 
-  return {data, connected};
+  return busState;
 }
