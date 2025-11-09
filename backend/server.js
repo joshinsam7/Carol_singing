@@ -18,20 +18,8 @@ const wss = new WebSocket.Server({ server });
 
 // --- Middleware ---db.
 app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = [
-      "http://localhost:3000",
-      "https://carol-tracker.onrender.com"
-    ];
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 
 // --- Load stops from JSON if empty ---
