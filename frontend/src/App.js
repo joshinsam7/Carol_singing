@@ -32,7 +32,7 @@ function AdminRouteGate() {
         return;
       }
       try {
-        const res = await fetch(`${API_URL}/api/admin/validate-route/${token}`);
+        const res = await fetch(`${API_URL}/api/admin/${token}/validate-route/`);
         if (!cancelled) {
           if (res.ok) {
             setAuthorized(true);

@@ -14,13 +14,28 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// Generate a random admin route token per process start (obscurity layer, not real auth)
-const ADMIN_ROUTE_TOKEN = crypto.randomBytes(12).toString("hex");
+const ADMIN_ROUTE_TOKEN = process.env.ADMIN_ROUTE_TOKEN;
 console.log(`\n🔐 Admin route token generated: ${ADMIN_ROUTE_TOKEN}`);
 console.log(`🔗 Admin URL path: /admin/${ADMIN_ROUTE_TOKEN}`);
 
 //  Middleware 
-app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE"], credentials: true }));
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://carol-tracker-hs3m.onrender.com',
+  'https://trinity-ys-caroling.netlify.app'
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // mobile apps / Postman
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    console.log("❌ CORS blocked origin:", origin);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -135,7 +150,7 @@ function broadcastBusState(extra = {}) {
   }
 
 // Validate route token (used by frontend guard)
-app.get("/api/admin/validate-route/:token", (req, res) => {
+app.get("/api/admin/:token/validate-route/", (req, res) => {
   if (req.params.token === ADMIN_ROUTE_TOKEN) {
     return res.json({ authorized: true });
   }
