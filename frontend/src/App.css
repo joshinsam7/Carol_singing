@@ -1,3 +1,4 @@
+/* App.css */
 html, body {
   overflow-x: hidden;  /* ✅ Prevent horizontal scrolling */
   width: 100%;
@@ -270,4 +271,149 @@ html {
 .christmas-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* information admin - popups */
+/* ================================
+   UNIVERSAL POPUP OVERLAY
+================================ */
+.popup-overlay {
+  position: fixed;
+  inset: 0; /* top:0, left:0, right:0, bottom:0 */
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999; /* VERY TOP */
+}
+
+/* ================================
+   POPUP CONTENT BOX
+================================ */
+.popup-content {
+  background: linear-gradient(145deg, #8B0000, #228B22);
+  border-radius: 16px;
+  padding: 25px;
+  width: 350px;
+  color: white;
+  box-shadow: 0 10px 45px rgba(0,0,0,0.35);
+  animation: popupFade 0.25s ease-out;
+  border: 2px solid #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@keyframes popupFade {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ================================
+   POPUP HEADER
+================================ */
+.header-with-close {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-with-close h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+}
+
+.header-with-close button {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  padding: 5px 8px;
+  transition: 0.2s;
+}
+
+.header-with-close button:hover {
+  transform: scale(1.2);
+}
+
+/* ================================
+   INPUTS
+================================ */
+.popup-content input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  background: #ffffffdd;
+  font-size: 15px;
+  color: #000;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.popup-content input:focus {
+  border-color: gold;
+  box-shadow: 0 0 0 3px rgba(255,215,0,0.5);
+}
+
+.familyName-id-div {
+  display: flex;
+  gap: 10px;
+}
+
+.church-id-input {
+  flex: 1;   /* small */
+}
+
+.family-name-input {
+  flex: 2;   /* big */
+}
+
+.address-input {
+  width: 100%; /* exactly Church ID + Family Name */
+}
+
+
+/* ================================
+   BUTTON ROW
+================================ */
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+.popup-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  transition: 0.2s ease;
+  background: linear-gradient(90deg, #8B0000, #228B22);
+}
+
+.popup-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+.cancel-btn {
+  background: #a52b2b;
+}
+
+.cancel-btn:hover {
+  transform: scale(1.05);
+  background: #b23535;
 }

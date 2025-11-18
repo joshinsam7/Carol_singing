@@ -147,23 +147,47 @@ export default function BusMap({
 
       <Marker position={busPosition} icon={busIcon}>
         <Popup>
-          {busStatus === "idle" && atStop ?
-            `We are still at Stop ${atStop.id || "N/A"} 🎶` :
-            "Van is en route 🚐"}
+          {busStatus === "idle" ? (
+            <>
+              <strong>Still at Stop {(atStop || destinationStop)?.id || "N/A"} 🎶</strong>
+              <br />
+              We are still singing! 🎵
+            </>
+          ) : busStatus === "en_route" && destinationStop ? (
+            <>
+              <strong>Van is en route 🚐</strong>
+              <br />
+              Heading to Stop {destinationStop.id}
+            </>
+          ) : (
+            <strong>Van is ready 🚐</strong>
+          )}
         </Popup>
       </Marker>
 
       {/* Orange = current destination */}
       {destination?.[0] != null && destination?.[1] != null && (
         <Marker position={destination} icon={destinationIcon}>
-          <Popup>Next Stop 📍</Popup>
+          <Popup>
+            <strong>Next Stop: {destinationStop?.id || "N/A"} 📍</strong>
+            <br />
+            <a href={`https://www.google.com/maps/?q=${encodeURIComponent(destinationStop?.address || "")}`} target="_blank" rel="noopener noreferrer">View on Map</a>
+          </Popup>
         </Marker>
       )}
 
       {/* Green = stop after next */}
       {nextDestination?.[0] != null && nextDestination?.[1] != null && (
         <Marker position={nextDestination} icon={greenLocaleIcon}>
-          <Popup>Stop After Next 📍</Popup>
+          <Popup>
+            <strong>Stop After Next 📍</strong>
+            {nextDestinationStop?.id && (
+              <>
+                <br />
+                Stop {nextDestinationStop.id}
+              </>
+            )}
+          </Popup>
         </Marker>
       )}
 

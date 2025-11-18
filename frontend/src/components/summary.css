@@ -1,3 +1,4 @@
+/* summary.css */
 .summary {
   position: absolute;
   top: 75%; /* ✅ centered vertically */
@@ -130,7 +131,7 @@ progress::-webkit-progress-value {
 }
 
 .stop-info p {
-  margin: 2px 0;
+  margin: 6px 0; /* increase vertical spacing */
 }
 
 .stop-name {
@@ -288,5 +289,205 @@ progress::-webkit-progress-value {
 
   .summary.collapsed {
     transform: translate(-50%, 35%); /* slightly pulled up */
+  }
+}
+
+.stop-info p {
+  margin: 6px 0; /* increase vertical spacing */
+}
+
+.stop-name {
+  margin-bottom: 8px; /* extra space after name */
+}
+
+.stop-address-wrapper {
+  display: block;
+  margin-bottom: 8px; /* more space after address */
+}
+
+.stop-eta {
+  display: block;
+  margin-bottom: 8px; /* more space after ETA */
+}
+
+.stop-arrival-status {
+  font-weight: 600;
+  color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 0.85rem;
+  margin-top: 4px; /* optional extra spacing above */
+}
+
+
+.stop-info p {
+  margin: 6px 0; /* increase vertical spacing */
+}
+
+.stop-name {
+  margin-bottom: 8px; /* extra space after name */
+}
+
+.stop-address-wrapper {
+  display: block;
+  margin-bottom: 8px; /* more space after address */
+}
+
+.stop-eta {
+  display: block;
+  margin-bottom: 8px; /* more space after ETA */
+}
+
+.stop-arrival-status {
+  font-weight: 600;
+  color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 0.85rem;
+  margin-top: 4px; /* optional extra spacing above */
+}
+
+/* =============================
+   Horizontal Bar Variant
+   Apply className "summary horizontal" to render as a full-width bottom bar.
+   ============================= */
+.summary.horizontal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  top: auto;
+  width: 100%;
+  max-width: 100%;
+  transform: none;
+  border-radius: 20px 20px 0 0;
+  padding: 12px 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+  overflow-x: auto;
+  backdrop-filter: blur(6px);
+}
+
+/* Hide scrollbars (WebKit) */
+.summary.horizontal::-webkit-scrollbar {
+  height: 8px;
+}
+.summary.horizontal::-webkit-scrollbar-track {
+  background: transparent;
+}
+.summary.horizontal::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+
+/* Horizontal mode collapsed (minimized) */
+.summary.horizontal.collapsed {
+  height: 48px;
+  padding: 8px 18px;
+  overflow: hidden;
+  cursor: pointer;
+  gap: 12px;
+}
+
+/* Adjust arrow container inside horizontal variant */
+.summary.horizontal .summary-toggle {
+  margin-bottom: 0;
+  align-self: flex-start;
+}
+
+/* Stops container side-by-side */
+.summary.horizontal .stops-container {
+  flex-direction: row !important;
+  gap: 32px;
+}
+
+.summary.horizontal .summary-section {
+  min-width: 280px; /* allow horizontal scroll cards */
+}
+
+/* Stop blocks in a row */
+.summary.horizontal .current-stop,
+.summary.horizontal .next-stop {
+  flex-direction: row;
+  align-items: center;
+}
+
+.summary.horizontal .stop-top-row {
+  gap: 12px;
+}
+
+.summary.horizontal .stop-info {
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .summary.horizontal {
+    padding: 10px 14px;
+    gap: 16px;
+  }
+  .summary.horizontal .summary-section {
+    min-width: 240px;
+  }
+}
+
+/* Larger screens: keep cards from stretching too tall */
+@media (min-width: 1201px) {
+  .summary.horizontal {
+    padding: 16px 40px;
+  }
+}
+
+/* =============================
+   Admin Controls (Button Group)
+   ============================= */
+.admin-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* horizontal & vertical spacing */
+  margin-top: 20px;
+  justify-content: center; /* center buttons in container */
+}
+
+.admin-button {
+  background: linear-gradient(135deg,#2563eb,#1e3a8a);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform .15s ease, box-shadow .15s ease, background .3s;
+  letter-spacing: .5px;
+}
+
+.admin-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.admin-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
+
+.summary.horizontal .admin-controls {
+  justify-content: flex-start; /* align with horizontal card flow */
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .admin-controls {
+    gap: 12px;
+  }
+  .admin-button {
+    flex: 1 1 calc(50% - 12px); /* two per row on small screens */
+    text-align: center;
   }
 }

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable require-jsdoc */
-import React, {useState, useMemo} from "react";
+import React, {useState, useMemo, useEffect} from "react";
 import "./summary.css";
 import downArrow from "../assets/white-arrow.png";
 import orangeLocale from "../assets/orange-locale.png";
@@ -17,16 +17,33 @@ export default function Summary({
   lastUpdate,
   routeETA,
   waitingForApproval,
+  admin = false,
+  adminEndpoint,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [lastCheckedETA, setCheckedETA] = useState(null);
+
   const toggleSummary = () => setIsCollapsed(!isCollapsed);
+
+  const lastArrivedStop = useMemo(() => {
+    if (!data || data.length === 0) return null;
+    const arrivedStops = data.filter((s) => !!s.arrivalTime);
+    return arrivedStops.length > 0 ? arrivedStops[arrivedStops.length - 1] : null;
+  }, [data]);
+
+  // ---------------- Computed last checked eta ----------------
+
+  useEffect(() => {
+    if (routeETA && lastCheckedETA === null) {
+      setCheckedETA(new Date());
+    }
+  }, [routeETA, lastCheckedETA]);
 
   // ---------------- Compute completed stops ----------------
   const completedStops = useMemo(() => {
-    if (!currentStop) return 0;
-    const index = data.findIndex((s) => s.id === currentStop?.id);
-    return index >= 0 ? index + 1 : 0;
-  }, [currentStop, data]);
+    if (!data || data.length === 0) return 0;
+    return data.filter((s) => !!s.arrivalTime).length; // count stops with arrivalTime
+  }, [data]);
 
   // ---------------- Compute status text ----------------
   const currentStatusText = (() => {
@@ -37,8 +54,58 @@ export default function Summary({
   })();
 
   const orangeAddress = currentDestination ? currentDestination.address || stopsMap?.get(currentDestination.id)?.address : "N/A";
-  const greenAddress = nextStop ? nextStop.address || stopsMap?.get(nextStop.id)?.address : "N/A";
 
+
+  // ---------------- Admin Control Handlers ----------------
+  const handleArrived = () => {
+    if (typeof adminEndpoint !== "function") return console.error("adminEndpoint function missing");
+    // Arrived: bus has reached the current destination
+    const stopId = currentDestination?.id;
+    if (!stopId) return console.error("No current destination to mark as arrived");
+    fetch(adminEndpoint("stop-arrived"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({stopId, timestamp: Date.now()}),
+    })
+        .then((res) => res.json())
+        .then((data) => console.log("Arrived:", data))
+        .catch((err) => console.error("Error marking arrived:", err));
+  };
+
+  const handleDeparted = () => {
+    if (typeof adminEndpoint !== "function") return console.error("adminEndpoint function missing");
+    // Departed: bus is leaving the current stop (where it's idle)
+    const stopId = currentStop?.id;
+    if (!stopId) return console.error("No current stop to depart from");
+    fetch(adminEndpoint("stop-departed"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({stopId, timestamp: Date.now()}),
+    })
+        .then((res) => res.json())
+        .then((data) => console.log("Departed:", data))
+        .catch((err) => console.error("Error marking departed:", err));
+  };
+
+  const handleSetNextStop = (e) => {
+    const nextStopId = Number(e.target.value);
+    if (!nextStopId) return;
+    if (typeof adminEndpoint !== "function") return console.error("adminEndpoint function missing");
+    fetch(adminEndpoint("set-next-stop"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({nextStopId}),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Set next stop:", data);
+          // Reset select after successful override
+          e.target.value = "";
+        })
+        .catch((err) => console.error("Error setting next stop:", err));
+  };
+
+  // ---------------- Render Component ----------------
   return (
     <div className={`summary ${isCollapsed ? "collapsed" : ""}`}>
       <div className="summary-toggle" onClick={toggleSummary}>
@@ -71,41 +138,44 @@ export default function Summary({
               <p className="stop-label">{currentStatusText}</p>
             </div>
             <div className="stop-info">
+              {/* Stop Name */}
               <p className="stop-name">
                 {currentDestination ? `Stop ${currentDestination.id}` : "N/A"}
               </p>
-              <a
-                className="stop-address"
-                href={currentDestination ? `https://www.google.com/maps/?q=${encodeURIComponent(orangeAddress)}` : "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {orangeAddress}
-              </a>
-              {routeETA && (
-                <p className="stop-eta">Approx. ETA: {Math.round(routeETA / 60)} min</p>
-              )}
-            </div>
-          </div>
 
-          {/* Green marker: Next stop */}
-          <div className="summary-section next-stop">
-            <div className="stop-icon">
-              <img src={greenLocale} alt="Next Stop" />
-              <p className="stop-label">Next Stop</p>
-            </div>
-            <div className="stop-info">
-              <p className="stop-name">{nextStop ? `Stop ${nextStop.id}` : "N/A"}</p>
-              <a
-                className="stop-address"
-                href={nextStop ? `https://www.google.com/maps/?q=${encodeURIComponent(greenAddress)}` : "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {greenAddress}
-              </a>
-              {routeETA != null && (
-                <p className="stop-eta">Approx. ETA: {Math.round(routeETA / 60)} min</p>
+              {/* Stop Address */}
+              {currentDestination && (
+                <p className="stop-address-wrapper">
+                  <a
+                    className="stop-address"
+                    href={`https://www.google.com/maps/?q=${encodeURIComponent(orangeAddress)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {orangeAddress}
+                  </a>
+                </p>
+              )}
+
+              {/* ETA - only show when en_route */}
+              {routeETA && busStatus === "en_route" && (
+                <p className="stop-eta">
+                  Approx. ETA: {Math.round(routeETA / 60)} min
+                  {lastCheckedETA && (
+                    <> (Computed at: {new Date(lastCheckedETA).toLocaleTimeString()})</>
+                  )}
+                </p>
+              )}
+
+              {/* Arrival Status and Time - show when idle */}
+              {busStatus === "idle" && currentDestination && (
+                <>
+                  {currentDestination.arrivalTime && (
+                    <p className="stop-eta">
+                      Arrived at: {new Date(currentDestination.arrivalTime).toLocaleTimeString()}
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -113,8 +183,33 @@ export default function Summary({
 
         <hr />
         <div className="last-updated">
-          <p>Last Updated: {lastUpdate || "N/A"}</p>
+          <p>Last Updated: {new Date(lastUpdate).toLocaleTimeString() || "N/A"}</p>
         </div>
+
+        {/* Admin buttons to control the bus */}
+        {admin &&
+        <div className="admin-controls">
+          <button className="admin-button" onClick={handleArrived} disabled={busStatus === "idle"}>Arrived</button>
+          <button className="admin-button" onClick={handleDeparted} disabled={busStatus !== "idle"}>Departed</button>
+          <select className="admin-select" onChange={handleSetNextStop} defaultValue="">
+            <option value="" disabled>Change Current Stop</option>
+            {data.map((stop) => {
+              let familyNames = "No Name";
+              try {
+                const families = typeof stop.families === "string" ? JSON.parse(stop.families) : stop.families;
+                familyNames = families ? Object.values(families).join(", ") : "No Name";
+              } catch (e) {
+                familyNames = "No Name";
+              }
+              return (
+                <option key={stop.id} value={stop.id}>
+                  Stop {stop.id} - {familyNames}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        }
       </div>
     </div>
   );
