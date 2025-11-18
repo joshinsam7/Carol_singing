@@ -126,7 +126,6 @@ function broadcastBusState(extra = {}) {
     const routeTokenHeader = req.headers["x-admin-route-token"];
     const paramToken = req.params.token; // present on /api/admin/:token/... routes
     if (
-      key === process.env.ADMIN_SECRET ||
       routeTokenHeader === ADMIN_ROUTE_TOKEN ||
       paramToken === ADMIN_ROUTE_TOKEN
     ) {
@@ -147,7 +146,7 @@ app.get("/api/admin/validate-route/:token", (req, res) => {
 // Admin key verification (lightweight). Returns authorized:true if header matches.
 app.get("/api/admin/:token/verify", (req, res) => {
   const key = req.headers['x-admin-key'];
-  if ((key && key === process.env.ADMIN_SECRET) || req.params.token === ADMIN_ROUTE_TOKEN) {
+  if (req.params.token === ADMIN_ROUTE_TOKEN) {
     return res.json({ authorized: true });
   }
   return res.status(403).json({ authorized: false });
