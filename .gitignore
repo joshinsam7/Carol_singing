@@ -26,3 +26,6 @@ yarn-error.log*
 
 database-debug.log
 firebase-debug.log
+
+backend/bus_tracker.db
+backend/*.db
