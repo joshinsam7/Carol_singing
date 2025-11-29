@@ -1,212 +1,134 @@
 {
     "stops": {
-        "0" :{
+        "0": {
             "families": {
-                "100": "Rev. Sam K. Easow and Bincy Kochamma"
+                "nan": "Rev. Jeevan John & Mer"
             },
-            "address": "6226 Eagle Mountain Ln Pearland TX 77578", 
-            "latitude": 29.492086,
-            "longitude": -95.391545,
-            "Arrived": null,
-            "Departure": null, 
-            "starting_time": "7:00 PM"
-        },
-        "1" : {
-            "families": {
-                "181": "Abraham and Sosamma Abraham (Kunjumon & Gracie)"
-            },
-            "address": "3104 Decker Field Lane, Pearland TX 77584",
-            "latitude": 29.5534254,
-            "longitude": -95.4144842,
+            "address": "335 Boardwalk Pkwy, Stafford, TX 77477",
+            "latitude": 29.6158745,
+            "longitude": -95.5680506,
             "Arrived": null,
             "Departure": null
         },
-        "2" : {
+        "1": {
             "families": {
-                "553": "Benny Mathew and Mini Benny (Benny & Mini)"
+                "159": "RAIGU UTHUP & JISNA SAJI"
             },
-            "address": "3410 Eden Cove Lane, Pearland TX 77584",
-            "latitude": 29.5451241,
-            "longitude": -95.4103888,
+            "address": "3807 Grand Prom, Stafford, TX 77477",
+            "latitude": 29.6195473,
+            "longitude": -95.5703035,
             "Arrived": null,
             "Departure": null
         },
-        "3" : {
+        "2": {
             "families": {
-                "542": "Jay and Beji Jacob (Jojy & Beji)"
+                "159": "JOSEPH M. CHEMMARAPPALLY &\r\nGRACYKUTTY JOSEPH"
             },
-            "address": "3205 Iris Trail Lane, Pearland TX 77584",
-            "latitude": 29.551819,
-            "longitude": -95.431197,
+            "address": "1303 N Medio River Cir, Sugar Land, TX 77478",
+            "latitude": 29.6048919,
+            "longitude": -95.5891145,
             "Arrived": null,
             "Departure": null
         },
-        "4" : {
+        "3": {
             "families": {
-                "317": "Jacob and Shiby Zachariah (Shibu & Shiby)"
+                "103": "M.T. MATHAI & MOLLY MATHAI"
             },
-            "address": "13218 Laguna Shores Drive, Pearland TX 77584",
-            "latitude": 29.5730242,
-            "longitude": -95.4253552,
+            "address": "2510 Castle Pl, Stafford, TX 77477",
+            "latitude": 29.6107067,
+            "longitude": -95.552195,
             "Arrived": null,
             "Departure": null
         },
-        "5" : {
+        "4": {
             "families": {
-                "316": "Thomas and Reena Abraham (Saji & Reena)"
+                "356": "MAGESH & SUMA MATHEW"
             },
-            "address": "13108 Indigo Bay Court, Pearland TX 77584",
-            "latitude": 29.56603,
-            "longitude": -95.4238358,
+            "address": "114 Ember Branch Dr, Missouri City, TX 77459",
+            "latitude": 29.5243404,
+            "longitude": -95.5455638,
             "Arrived": null,
             "Departure": null
         },
-        "6" : {
+        "5": {
             "families": {
-                "238": "Daniel and Mary Zachariah (Achenkunju & Valsa)"
+                "270": "P.K. THOMAS & ACHAMMA THOMAS"
             },
-            "address": "2712 White Falls Drive, Pearland TX 77584",
-            "latitude": 29.5613685,
-            "longitude": -95.4278594,
+            "address": "2338 Chappell Ln, Missouri City, TX 77459",
+            "latitude": 29.5521009,
+            "longitude": -95.5357156,
             "Arrived": null,
             "Departure": null
         },
-        "7" : {
+        "6": {
             "families": {
-                "260": "Thayyil J. and Sheeba Jose (Jose & Sheeba)"
+                "368": "BOBY & ANNIE BENJAMIN (3 Families)"
             },
-            "address": "12001 Opal Creek Drive, Pearland TX 77584",
-            "latitude": 29.5629134,
-            "longitude": -95.4061056,
+            "address": "1631 Parkview Ln, Missouri City, TX 77459",
+            "latitude": 29.5530871,
+            "longitude": -95.5232402,
             "Arrived": null,
             "Departure": null
         },
-        "8" : {
+        "7": {
             "families": {
-                "346": "Joseph M. and Goldy George (Jojoe & Goldy)"
+                "565": "JITHIN KUNJUMON ALEX & SWAPNA\r\nSAMUEL"
             },
-            "address": "2404 Delta Bridge Drive, Pearland TX 77584",
-            "latitude": 29.5678475,
-            "longitude": -95.4065697,
+            "address": "1523 Maple Rdg Dr, Missouri City, TX 77459",
+            "latitude": 29.5700074,
+            "longitude": -95.5227015,
             "Arrived": null,
             "Departure": null
         },
-        "9" : {
+        "8": {
             "families": {
-                "409": "Thomas Mathew and Jolly Thomas (Jeemon & Jolly)"
+                "526": "JOHN VARGHESE & PREMNA (ANIL & PREMNA)"
             },
-            "address": "2221 Shore Creek Drive, Pearland TX 77584",
-            "latitude": 29.5700249,
-            "longitude": -95.4035312,
+            "address": "3926 Catania Bay Ct, Missouri City, TX 77459",
+            "latitude": 29.5509248,
+            "longitude": -95.5246511,
             "Arrived": null,
             "Departure": null
         },
-        "10" : {
+        "9": {
             "families": {
-                "388": "Alex Pappachan and Giji Alex (Sabu & Giji)"
+                "482": "T.G SAMUELKUTY & LIZY SAMUEL"
             },
-            "address": "2014 Mountain Creek Street, Pearland TX 77584",
-            "latitude": 29.5733029,
-            "longitude": -95.4013018,
+            "address": "3330 Chimera Ln, Missouri City, TX 77459",
+            "latitude": 29.5487333,
+            "longitude": -95.5080802,
             "Arrived": null,
             "Departure": null
         },
-        "11" : {
+        "10": {
             "families": {
-                "389": "Binu and Seby Yohannan (Binu & Seby)"
+                "508": "P. John Thomas & Mariamma Thomas"
             },
-            "address": "11603 Summer Moon Drive, Pearland TX 77584",
-            "latitude": 29.5646828,
-            "longitude": -95.3991628,
+            "address": "3934 Montego Bay Ct, Missouri City, TX 77459",
+            "latitude": 29.5441991,
+            "longitude": -95.5220227,
             "Arrived": null,
             "Departure": null
         },
-        "12" : {
+        "11": {
             "families": {
-                "194": "Muttathu Lukose. and Mariamma (Aniyankunju & Alice)"
+                "519": "T.S. JOHNSON & SHIBY JOHNSON"
             },
-            "address": "11301 Soft Breeze Court, Pearland TX 77584",
-            "latitude": 29.5658702,
-            "longitude": -95.394439,
-            "Arrived": null,
-            "Departure": null
-        },
-        "13" :{
-            "families": {
-                "366": "Reji Thomas and Sherry Reji (Reji & Sherry)"
-            },
-            "address": "2504 Still Bay Street, Pearland TX 77584",
-            "latitude": 29.5653508,
-            "longitude": -95.3976002,
-            "Arrived": null,
-            "Departure": null
-        },
-        "14" : {
-            "families": {
-                "369": "V. K. John and Valsamma John (Babu & Valsa)"
-            },
-            "address": "11305 Sailwing Creek Court, Pearland TX 77584",
-            "latitude": 29.5651614,
-            "longitude": -95.3947646,
-            "Arrived": null,
-            "Departure": null
-        },
-        "15" :{
-            "families": {
-                "538": "Sujit George and Cicil Zaina Emmatty (Sujit & Cicil)"
-            },
-            "address": "11310 Misty Morning Street, Pearland TX 77584",
-            "latitude": 29.5663476,
-            "longitude": -95.3953124,
-            "Arrived": null,
-            "Departure": null
-        },
-        "16" :{
-            "families": {
-                "123": "P. I. Varughese and Annamma (Thankachan & Annie)"
-            },
-            "address": "11301 Enclave Lake Lane, Pearland TX 77584",
-            "latitude": 29.5723884,
-            "longitude": -95.3936364,
-            "Arrived": null,
-            "Departure": null
-        },
-        "17" : {
-            "families": {
-                "480": "Reji Thomas and Anisha Scaria (Boston Reji & Anisha)"
-            },
-            "address": "12606 Floral Park Lane, Pearland TX 77584",
-            "latitude": 29.5445639,
-            "longitude": -95.4161839,
-            "Arrived": null,
-            "Departure": null
-        },
-        "18" : {
-            "families": {
-                "214": "M. Georgekutty and Thankamma (Georgekutty & Mani)"
-            },
-            "address": "2816 Green Mountain Drive, Pearland TX 77584",
-            "latitude": 29.5588742,
-            "longitude": -95.436017,
-            "Arrived": null,
-            "Departure": null
-        },
-        "19" : {
-            "families": {
-                "391": "Joseph George and Daisy George (Raju & Daisy)"
-            },
-            "address": "11313 Enclave Lake Lane, Pearland TX 77584",
-            "latitude": 29.5736749,
-            "longitude": -95.3937527,
+            "address": "2414 Concord Ter, Missouri City, TX 77489",
+            "latitude": 29.5924482,
+            "longitude": -95.5386651,
             "Arrived": null,
             "Departure": null
         }
     },
-    "nextStopId": 20,
-    "tripStarted": false, 
+    "nextStopId": 12,
+    "tripStarted": false,
     "currentStop": -1,
     "nextStop": 0,
-    "busLocation": { "lat": 29.619707, "lng": -95.3193855 },
+    "busLocation": {
+        "lat": 29.619707,
+        "lng": -95.3193855
+    },
     "status": "idle",
     "lastUpdate": 1700000000
 }

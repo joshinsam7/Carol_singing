@@ -39,4 +39,3 @@ if (row.count === 0) {
 }
 
 module.exports = db;
-//     "address": "2934 Dawn Haven Lane, Pearland TX 77584", -> 0.
