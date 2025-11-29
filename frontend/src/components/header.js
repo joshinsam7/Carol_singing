@@ -5,7 +5,7 @@ import "./header.css";
 import logo from "../assets/marthoma-seeklogo.png";
 export function Header({toggleInfo}) {
   const [day, setDay] = useState(1);
-  const [location, setLocation] = useState("Pasadena");
+  const [location, setLocation] = useState("Missouri City & Stafford");
   const [isMobileMenu, setIsMobileMenu] = useState(false);
 
   const handleHamburgerClick = () => {
