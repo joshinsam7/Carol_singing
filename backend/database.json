@@ -8,7 +8,8 @@
             "latitude": 29.6158745,
             "longitude": -95.5680506,
             "Arrived": null,
-            "Departure": null
+            "Departure": null,
+            "starting_time": "6:00 PM"
         },
         "1": {
             "families": {
