@@ -1,7 +1,6 @@
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
@@ -14,9 +13,19 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+// Heartbeat ping/pong to keep connections healthy
+function heartbeat() { this.isAlive = true; }
+const wsHealthInterval = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (ws.isAlive === false) return ws.terminate();
+    ws.isAlive = false;
+    try { ws.ping(); } catch (_) {}
+  });
+}, 30000);
+
+wss.on('close', () => clearInterval(wsHealthInterval));
+
 const ADMIN_ROUTE_TOKEN = process.env.ADMIN_ROUTE_TOKEN;
-console.log(`\n🔐 Admin route token generated: ${ADMIN_ROUTE_TOKEN}`);
-console.log(`🔗 Admin URL path: /admin/${ADMIN_ROUTE_TOKEN}`);
 
 //  Middleware 
 const allowedOrigins = [
@@ -30,14 +39,16 @@ app.use(cors({
   origin: function(origin, callback) {
     if (!origin) return callback(null, true); // mobile apps / Postman
     if (allowedOrigins.includes(origin)) return callback(null, true);
-    console.log("❌ CORS blocked origin:", origin);
+    if (process.env.NODE_ENV === 'development') {
+      console.log("❌ CORS blocked origin:", origin);
+    }
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 }));
 
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 //  Load stops from JSON if empty 
 function loadStopsIfEmpty() {
@@ -60,33 +71,38 @@ function loadStopsIfEmpty() {
         JSON.stringify(s.families || {})
       );
     }
-    console.log(`Inserted ${Object.keys(stopsData.stops).length} stops into the database.`);
   }
 }
 loadStopsIfEmpty();
 
-//  Print out the database contents for debugging 
-try {
-  const stops = db.prepare("SELECT * FROM stops").all();
-  const busInfo = db.prepare("SELECT * FROM bus_info").all();
+//  Print out the database contents for debugging (dev only)
+if (process.env.NODE_ENV === 'development') {
+  try {
+    const stops = db.prepare("SELECT * FROM stops").all();
+    const busInfo = db.prepare("SELECT * FROM bus_info").all();
 
-  console.log("\n================= 🗺️ Stops Table =================");
-  console.table(stops);
+    console.log("\n================= 🗺️ Stops Table =================");
+    console.table(stops);
 
-  console.log("\n================= 🚌 Bus Info Table ================");
-  console.table(busInfo);
+    console.log("\n================= 🚌 Bus Info Table ================");
+    console.table(busInfo);
 
-  console.log("==================================================\n");
-} catch (err) {
-  console.error("❌ Error reading database:", err);
+    console.log("==================================================\n");
+  } catch (err) {
+    console.error("❌ Error reading database:", err);
+  }
 }
 
 //  Cache stops 
 let cachedStops = db.prepare("SELECT * FROM stops ORDER BY id").all();
 
+// Cache initial bus state (updated on broadcasts)
+let cachedBusState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
+
 // Prepared statements for cache updates
 const getStopStmt = db.prepare("SELECT * FROM stops WHERE id=?");
 const getAllStopsStmt = db.prepare("SELECT * FROM stops ORDER BY id");
+const getBusStateStmt = db.prepare("SELECT * FROM bus_info WHERE id=1");
 
 // Full cache refresh (use only for add/delete operations)
 function refreshStopsCache() {
@@ -110,25 +126,24 @@ function getStopById(id) {
 
 //  WebSocket Broadcast 
 function broadcastBusState(extra = {}) {
-  const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
+  cachedBusState = getBusStateStmt.get(); // Refresh cache
 
   const payload = {
     type: "bus_update",
     data: {
-      status: busState.status,
-      current_stop: busState.status === 'idle' ? busState.current_stop : null,
-      destination_stop: busState.destination_stop_override ?? busState.destination_stop,
-      lat: busState.lat,
-      lng: busState.lng,
+      status: cachedBusState.status,
+      current_stop: cachedBusState.status === 'idle' ? cachedBusState.current_stop : null,
+      destination_stop: cachedBusState.destination_stop_override ?? cachedBusState.destination_stop,
+      lat: cachedBusState.lat,
+      lng: cachedBusState.lng,
       // stops: relevantStops, 
-      last_update: busState.last_update,
+      last_update: cachedBusState.last_update,
       arrivalTime: extra.arrivalTime || null,
       routeETA: extra.routeETA || null
     }
   };
 
   const message = JSON.stringify(payload);
-  console.log("Broadcasted Message " + message);
 
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) client.send(message);
@@ -168,6 +183,7 @@ app.get("/api/admin/:token/verify", (req, res) => {
 });
 
 // Bus location update
+let lastBroadcastAt = 0;
 app.post("/api/bus-location", (req, res) => {
   const { lat, lon } = req.body;
   if (lat == null || lon == null) return res.status(400).json({ success: false });
@@ -192,7 +208,12 @@ app.post("/api/bus-location", (req, res) => {
     `).run(cachedStops[0].id);
   }
 
-  broadcastBusState();
+  // Throttle broadcasts to at most once per second
+  const now = Date.now();
+  if (now - lastBroadcastAt >= 1000) {
+    lastBroadcastAt = now;
+    broadcastBusState();
+  }
   res.json({ success: true });
 });
 
@@ -443,20 +464,26 @@ app.get("/ping", (req, res) => res.send("ok"));
 
 // WebSocket connection
 wss.on("connection", (ws) => {
-  console.log("Client connected via WebSocket");
+  ws.isAlive = true;
+  ws.on('pong', heartbeat);
 
-  const busState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
-  ws.send(JSON.stringify({
+  // Use cached bus state (no DB read per connection)
+  const payload = {
     type: "bus_update",
     data: {
-      status: busState.status,
-      at_stop: busState.status === 'idle' ? busState.current_stop : null,
-      destination_stop: busState.destination_stop,
-      last_update: busState.last_update
+      status: cachedBusState.status,
+      current_stop: cachedBusState.status === 'idle' ? cachedBusState.current_stop : null,
+      destination_stop: cachedBusState.destination_stop_override ?? cachedBusState.destination_stop,
+      lat: cachedBusState.lat,
+      lng: cachedBusState.lng,
+      last_update: cachedBusState.last_update,
+      arrivalTime: null,
+      routeETA: null
     }
-  }));
+  };
+  try { ws.send(JSON.stringify(payload)); } catch (_) {}
 
-  ws.on("close", () => console.log("Client disconnected"));
+  ws.on("close", () => {});
 });
 
 // Start server

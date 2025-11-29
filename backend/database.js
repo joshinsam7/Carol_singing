@@ -1,6 +1,6 @@
 // database.js
 const Database = require('better-sqlite3');
-const db = new Database('bus_tracker.db', { verbose: console.log });
+const db = new Database('bus_tracker.db');
 
 // Initialize tables
 db.exec(`

@@ -82,10 +82,6 @@ export default function BusMap({
   useEffect(() => {
     if (!currentLocation) return;
     setBusPosition([currentLocation.lat, currentLocation.lng]);
-
-    // Log correctly
-    console.log("Bus's Location in BusMap", currentLocation.lat, " Long :", currentLocation.lng,
-    );
   }, [currentLocation]);
 
 
