@@ -2,136 +2,116 @@
     "stops": {
         "0": {
             "families": {
-                "nan": "Rev. Jeevan John & Merly Kochamma"
+                "176": "Rajan Koshy (4 Families)"
             },
-            "address": "335 Boardwalk Pkwy, Stafford, TX 77477",
-            "latitude": 29.6158745,
-            "longitude": -95.5680506,
+            "address": "1214 CHURCH STREET, GALVESTON, TX 77550",
+            "latitude": 29.3070374,
+            "longitude": -94.7813489,
             "Arrived": null,
             "Departure": null
         },
         "1": {
             "families": {
-                "159": "Raigu Uthup & Jisna Saji"
+                "387": "Thomas P. Koikkeriel (2 Families)"
             },
-            "address": "3807 Grand Prom, Stafford, TX 77477",
-            "latitude": 29.6195473,
-            "longitude": -95.5703035,
+            "address": "1324 BOWEN DRIVE, LEAGUE CITY, TX 77573",
+            "latitude": 29.4814225,
+            "longitude": -95.0836502,
             "Arrived": null,
             "Departure": null
         },
         "2": {
             "families": {
-                "134": "K.J. KOSHY & ROSAMMA KOSHY"
+                "333": "Shawn P. Alexander (2 Families)"
             },
-            "address": "419 Nadia Way, Stafford, TX 77477",
-            "latitude": 29.612175,
-            "longitude": -95.5737878,
+            "address": "2852 Allesia Ln, League City, TX 77573",
+            "latitude": 29.4980781,
+            "longitude": -95.048537,
             "Arrived": null,
             "Departure": null
         },
         "3": {
             "families": {
-                "159": "Joseph M. Chemmaarappally & Gracykutty Joseph"
+                "184": "John Chacko"
             },
-            "address": "1303 N Medio River Cir, Sugar Land, TX 77478",
-            "latitude": 29.6048919,
-            "longitude": -95.5891145,
+            "address": "1004 Goose Creek Street, Webster, TX 77598",
+            "latitude": 29.5280849,
+            "longitude": -95.0982972,
             "Arrived": null,
             "Departure": null
         },
         "4": {
             "families": {
-                "103": "M.T. Mathai & Molly Mathai"
+                "459": "Anil Cherian"
             },
-            "address": "2510 Castle Pl, Stafford, TX 77477",
-            "latitude": 29.6107067,
-            "longitude": -95.552195,
+            "address": "2406 Bisbee Road, League City, TX 77573",
+            "latitude": 29.4719756,
+            "longitude": -95.1138976,
             "Arrived": null,
             "Departure": null
         },
         "5": {
             "families": {
-                "356": "Magesh & Suma Mathew"
+                "146": "Kuruvilla Abraham"
             },
-            "address": "114 Ember Branch Dr, Missouri City, TX 77459",
-            "latitude": 29.5243404,
-            "longitude": -95.5455638,
+            "address": "626 SPRING BREEZE, LEAGUE CITY, TX 77573",
+            "latitude": 29.4781466,
+            "longitude": -95.1528406,
             "Arrived": null,
             "Departure": null
         },
         "6": {
             "families": {
-                "270": "P.K. Thomas & Achamma Thomas"
+                "173": "P.S. Thomas"
             },
-            "address": "2338 Chappell Ln, Missouri City, TX 77459",
-            "latitude": 29.5521009,
-            "longitude": -95.5357156,
+            "address": "1208 OAK HOLLOW DRIVE, FRIENDS WOOD, TX 77546",
+            "latitude": 29.5053103,
+            "longitude": -95.2093747,
             "Arrived": null,
             "Departure": null
         },
         "7": {
             "families": {
-                "368": "Boby & Annie Benjamin Mathew Varghese (Georgekutty & Ammi Sam Daniel (Saju & Santhamma) Sam Varghese (Sam & Geetha)"
+                "203": "Raju Kurian (2 Families)"
             },
-            "address": "1631 Parkview Ln, Missouri City, TX 77459",
-            "latitude": 29.5530871,
-            "longitude": -95.5232402,
+            "address": "1408 PINE ASH COURT, PEARLAND, TX 77581",
+            "latitude": 29.5382547,
+            "longitude": -95.22907,
             "Arrived": null,
             "Departure": null
         },
         "8": {
             "families": {
-                "565": "Jithin Kunjumon Alex & Swapna Samuel"
+                "338": "John Thomas (2 Families)"
             },
-            "address": "1523 Maple Rdg Dr, Missouri City, TX 77459",
-            "latitude": 29.5700074,
-            "longitude": -95.5227015,
+            "address": "10410 KELLY LAKE TRAIL, HOUSTON, TX 77089",
+            "latitude": 29.5784889,
+            "longitude": -95.21683,
             "Arrived": null,
             "Departure": null
         },
         "9": {
             "families": {
-                "526": "John Varghese & Premna (Anil & Premna) Aleyamma Varghese"
+                "379": "Tity M. Simon"
             },
-            "address": "3926 Catania Bay Ct, Missouri City, TX 77459",
-            "latitude": 29.5509248,
-            "longitude": -95.5246511,
+            "address": "12210 COURTNEY GREENS RD, HOUSTON, TX 77089",
+            "latitude": 29.5711508,
+            "longitude": -95.2178436,
             "Arrived": null,
             "Departure": null
         },
         "10": {
             "families": {
-                "482": "T.G Samuelkuty & Lizy Samuel"
+                "153": "Skariah Abraham (4 Families)"
             },
-            "address": "3330 Chimera Ln, Missouri City, TX 77459",
-            "latitude": 29.5487333,
-            "longitude": -95.5080802,
-            "Arrived": null,
-            "Departure": null
-        },
-        "11": {
-            "families": {
-                "508": "P. John Thomas & Mariamma Thomas"
-            },
-            "address": "3934 Montego Bay Ct, Missouri City, TX 77459",
-            "latitude": 29.5441991,
-            "longitude": -95.5220227,
-            "Arrived": null,
-            "Departure": null
-        },
-        "12": {
-            "families": {
-                "519": "T.S. Johnson & Shiby Johnson"
-            },
-            "address": "2414 Concord Ter, Missouri City, TX 77489",
-            "latitude": 29.5924482,
-            "longitude": -95.5386651,
+            "address": "10030 RHINEY CT, HOUSTON, TX 77089",
+            "latitude": 29.5707368,
+            "longitude": -95.2186885,
             "Arrived": null,
             "Departure": null
         }
     },
-    "nextStopId": 13,
+    "nextStopId": 11,
     "tripStarted": false,
     "currentStop": -1,
     "nextStop": 0,
