@@ -4,8 +4,8 @@ import React, {useState} from "react";
 import "./header.css";
 import logo from "../assets/marthoma-seeklogo.png";
 export function Header({toggleInfo}) {
-  const [day, setDay] = useState(1);
-  const [location, setLocation] = useState("Missouri City & Stafford");
+  const [day, setDay] = useState(3);
+  const [location, setLocation] = useState("Galveston & Other Areas");
   const [isMobileMenu, setIsMobileMenu] = useState(false);
 
   const handleHamburgerClick = () => {

@@ -59,7 +59,7 @@ export default function Summary({
   // ---------------- Admin Control Handlers ----------------
   const handleArrived = () => {
     if (typeof adminEndpoint !== "function") return console.error("adminEndpoint function missing");
-    // Arrived: bus has reached the current destination
+    if (busStatus !== 'en_route') return; // guard
     const stopId = currentDestination?.id;
     if (!stopId) return console.error("No current destination to mark as arrived");
     fetch(adminEndpoint("stop-arrived"), {
@@ -67,14 +67,14 @@ export default function Summary({
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({stopId, timestamp: Date.now()}),
     })
-        .then((res) => res.json())
-        .then((data) => console.log("Arrived:", data))
-        .catch((err) => console.error("Error marking arrived:", err));
+      .then(res => res.json())
+      .then(data => console.log("Arrived:", data))
+      .catch(err => console.error("Error marking arrived:", err));
   };
 
   const handleDeparted = () => {
     if (typeof adminEndpoint !== "function") return console.error("adminEndpoint function missing");
-    // Departed: bus is leaving the current stop (where it's idle)
+    if (busStatus !== 'idle') return; // guard
     const stopId = currentStop?.id;
     if (!stopId) return console.error("No current stop to depart from");
     fetch(adminEndpoint("stop-departed"), {
@@ -82,9 +82,9 @@ export default function Summary({
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({stopId, timestamp: Date.now()}),
     })
-        .then((res) => res.json())
-        .then((data) => console.log("Departed:", data))
-        .catch((err) => console.error("Error marking departed:", err));
+      .then(res => res.json())
+      .then(data => console.log("Departed:", data))
+      .catch(err => console.error("Error marking departed:", err));
   };
 
   const handleSetNextStop = (e) => {
@@ -157,8 +157,8 @@ export default function Summary({
                 </p>
               )}
 
-              {/* ETA - only show when en_route */}
-              {routeETA && busStatus === "en_route" && (
+              {/* ETA - show when available, irrespective of status */}
+              {routeETA && (
                 <p className="stop-eta">
                   Approx. ETA: {Math.round(routeETA / 60)} min
                   {lastCheckedETA && (
@@ -189,8 +189,20 @@ export default function Summary({
         {/* Admin buttons to control the bus */}
         {admin &&
         <div className="admin-controls">
-          <button className="admin-button" onClick={handleArrived} disabled={busStatus === "idle"}>Arrived</button>
-          <button className="admin-button" onClick={handleDeparted} disabled={busStatus !== "idle"}>Departed</button>
+          <button
+            className={`admin-button ${busStatus === 'en_route' ? 'arrived-active' : ''}`}
+            onClick={handleArrived}
+            disabled={busStatus !== 'en_route'}
+          >
+            Arrived
+          </button>
+          <button
+            className={`admin-button ${busStatus === 'idle' ? 'departed-active' : ''}`}
+            onClick={handleDeparted}
+            disabled={busStatus !== 'idle'}
+          >
+            Departed
+          </button>
           <select className="admin-select" onChange={handleSetNextStop} defaultValue="">
             <option value="" disabled>Change Current Stop</option>
             {data.map((stop) => {

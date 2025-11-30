@@ -459,6 +459,27 @@ app.post("/api/admin/:token/delete-stop", adminAuth, (req, res) => {
   }
 });
 
+app.get("/api/admin/:token/export-db", adminAuth, (req, res) => {
+  try {
+    const stops = db.prepare("SELECT * FROM stops").all();
+    const busInfo = db.prepare("SELECT * FROM bus_info").all();
+
+    const exportData = {
+      stops: stops,
+      bus_info: busInfo,
+      exported_at: new Date().toISOString()
+    };
+
+    // Set headers for file download
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="bus-tracker-export-${Date.now()}.json"`);
+    
+    res.json(exportData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+}); 
 
 // Ping endpoint
 app.get("/ping", (req, res) => res.send("ok"));
