@@ -2,116 +2,76 @@
     "stops": {
         "0": {
             "families": {
-                "176": "Rajan Koshy (4 Families)"
+                "139": "Abraham Idiculla"
             },
-            "address": "1214 CHURCH STREET, GALVESTON, TX 77550",
-            "latitude": 29.3070374,
-            "longitude": -94.7813489,
+            "address": "5615 Edith St, Houston, TX 77081",
+            "latitude": 29.689661,
+            "longitude": -95.4891077,
             "Arrived": null,
             "Departure": null
         },
         "1": {
             "families": {
-                "387": "Thomas P. Koikkeriel (2 Families)"
+                "106": "P. M. John"
             },
-            "address": "1324 BOWEN DRIVE, LEAGUE CITY, TX 77573",
-            "latitude": 29.4814225,
-            "longitude": -95.0836502,
+            "address": "4141 Woodhaven St, Houston, TX 77025",
+            "latitude": 29.6653837,
+            "longitude": -95.443894,
             "Arrived": null,
             "Departure": null
         },
         "2": {
             "families": {
-                "333": "Shawn P. Alexander (2 Families)"
+                "448": "V. M. Thomaskutty"
             },
-            "address": "2852 Allesia Ln, League City, TX 77573",
-            "latitude": 29.4980781,
-            "longitude": -95.048537,
+            "address": "9814 Oboe Dr, Houston, TX 77025",
+            "latitude": 29.676127,
+            "longitude": -95.4454442,
             "Arrived": null,
             "Departure": null
         },
         "3": {
             "families": {
-                "184": "John Chacko"
+                "283": "Lilly Varghese"
             },
-            "address": "1004 Goose Creek Street, Webster, TX 77598",
-            "latitude": 29.5280849,
-            "longitude": -95.0982972,
+            "address": "4102 Osby St, Houston, TX 77025",
+            "latitude": 29.6767641,
+            "longitude": -95.4435872,
             "Arrived": null,
             "Departure": null
         },
         "4": {
             "families": {
-                "459": "Anil Cherian"
+                "308": "Mathen Abraham"
             },
-            "address": "2406 Bisbee Road, League City, TX 77573",
-            "latitude": 29.4719756,
-            "longitude": -95.1138976,
+            "address": "4121 Lemac Dr, Houston, TX 77025",
+            "latitude": 29.6782583,
+            "longitude": -95.4440865,
             "Arrived": null,
             "Departure": null
         },
         "5": {
             "families": {
-                "146": "Kuruvilla Abraham"
+                "135": "Chacko Nellickal"
             },
-            "address": "626 SPRING BREEZE, LEAGUE CITY, TX 77573",
-            "latitude": 29.4781466,
-            "longitude": -95.1528406,
+            "address": "4018 Glenshire Dr, Houston, TX 77025",
+            "latitude": 29.6856933,
+            "longitude": -95.4411299,
             "Arrived": null,
             "Departure": null
         },
         "6": {
             "families": {
-                "173": "P.S. Thomas"
+                "183": "Thomas Idiculla"
             },
-            "address": "1208 OAK HOLLOW DRIVE, FRIENDS WOOD, TX 77546",
-            "latitude": 29.5053103,
-            "longitude": -95.2093747,
-            "Arrived": null,
-            "Departure": null
-        },
-        "7": {
-            "families": {
-                "203": "Raju Kurian (2 Families)"
-            },
-            "address": "1408 PINE ASH COURT, PEARLAND, TX 77581",
-            "latitude": 29.5382547,
-            "longitude": -95.22907,
-            "Arrived": null,
-            "Departure": null
-        },
-        "8": {
-            "families": {
-                "338": "John Thomas (2 Families)"
-            },
-            "address": "10410 KELLY LAKE TRAIL, HOUSTON, TX 77089",
-            "latitude": 29.5784889,
-            "longitude": -95.21683,
-            "Arrived": null,
-            "Departure": null
-        },
-        "9": {
-            "families": {
-                "379": "Tity M. Simon"
-            },
-            "address": "12210 COURTNEY GREENS RD, HOUSTON, TX 77089",
-            "latitude": 29.5711508,
-            "longitude": -95.2178436,
-            "Arrived": null,
-            "Departure": null
-        },
-        "10": {
-            "families": {
-                "153": "Skariah Abraham (4 Families)"
-            },
-            "address": "10030 RHINEY CT, HOUSTON, TX 77089",
-            "latitude": 29.5707368,
-            "longitude": -95.2186885,
+            "address": "5530 Edith St, Houston, TX 77081",
+            "latitude": 29.6902643,
+            "longitude": -95.4864649,
             "Arrived": null,
             "Departure": null
         }
     },
-    "nextStopId": 11,
+    "nextStopId": 7,
     "tripStarted": false,
     "currentStop": -1,
     "nextStop": 0,
