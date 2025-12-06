@@ -4,8 +4,8 @@ import React, {useState} from "react";
 import "./header.css";
 import logo from "../assets/marthoma-seeklogo.png";
 export function Header({toggleInfo}) {
-  const [day, setDay] = useState(4);
-  const [location, setLocation] = useState("Medical Center & Stella Link");
+  const [day, setDay] = useState(5);
+  const [location, setLocation] = useState("Pearland East");
   const [isMobileMenu, setIsMobileMenu] = useState(false);
 
   const handleHamburgerClick = () => {
@@ -21,7 +21,7 @@ export function Header({toggleInfo}) {
             <img src={logo} alt="Logo" className="header-logo" />
           </div>
           <div className="header-text">
-            <h1 className="header-title">Trinity Carol Rounds 2025</h1>
+            <h1 className="header-title">Trinity MTC Carol Rounds </h1>
             <p className="header-info">Day {day} • {location}</p>
           </div>
         </div>
