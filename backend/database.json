@@ -92,16 +92,6 @@
         },
         "9": {
             "families": {
-                "nan": "Sijoy Varghese / Michele"
-            },
-            "address": "20435 Montecrest Circle \nSpring Tx 77379",
-            "latitude": 30.061429,
-            "longitude": -95.5408862,
-            "Arrived": null,
-            "Departure": null
-        },
-        "10": {
-            "families": {
                 "nan": "Riju Rajan / Anitha Riju"
             },
             "address": "15410 Thompson Ridge Drive\nCypress TX 77429",
@@ -110,7 +100,7 @@
             "Arrived": null,
             "Departure": null
         },
-        "11": {
+        "10": {
             "families": {
                 "nan": "Libin Alexander / Manisha"
             },
@@ -120,7 +110,7 @@
             "Arrived": null,
             "Departure": null
         },
-        "12": {
+        "11": {
             "families": {
                 "nan": "Anson Varghese/ Jiya"
             },
@@ -130,7 +120,7 @@
             "Arrived": null,
             "Departure": null
         },
-        "13": {
+        "12": {
             "families": {
                 "nan": "Reji Varghese / Jibi Varghese"
             },
@@ -140,7 +130,7 @@
             "Arrived": null,
             "Departure": null
         },
-        "14": {
+        "13": {
             "families": {
                 "nan": "Saji Varghese / Liby Varghese"
             },
@@ -151,7 +141,7 @@
             "Departure": null
         }
     },
-    "nextStopId": 15,
+    "nextStopId": 14,
     "tripStarted": false,
     "currentStop": -1,
     "nextStop": 0,
