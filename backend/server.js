@@ -31,7 +31,8 @@ const ADMIN_ROUTE_TOKEN = process.env.ADMIN_ROUTE_TOKEN;
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'http://192.168.1.196:3001',
+  'http://192.168.1.207:3000',
+  'http://192.168.1.207:3001',
   'https://carol-tracker-hs3m.onrender.com',
   'https://trinity-ys-caroling.netlify.app'
 ];
@@ -41,7 +42,7 @@ app.use(cors({
     if (!origin) return callback(null, true); // mobile apps / Postman
     if (allowedOrigins.includes(origin)) return callback(null, true);
     if (process.env.NODE_ENV === 'development') {
-      console.log("❌ CORS blocked origin:", origin);
+      // console.log("❌ CORS blocked origin:", origin);
     }
     callback(new Error('Not allowed by CORS'));
   },
@@ -60,17 +61,28 @@ function loadStopsIfEmpty() {
     const stopsData = JSON.parse(rawData);
 
     const stmt = db.prepare(
-      "INSERT INTO stops (address, latitude, longitude, starting_time, families) VALUES (?, ?, ?, ?, ?)"
+      "INSERT INTO stops (address, latitude, longitude, starting_time, families, display_order) VALUES (?, ?, ?, ?, ?, ?)"
     );
 
+    let order = 0;
     for (const s of Object.values(stopsData.stops)) {
       stmt.run(
         s.address,
         s.latitude,
         s.longitude,
         s.starting_time || null,
-        JSON.stringify(s.families || {})
+        JSON.stringify(s.families || {}),
+        order++
       );
+    }
+  } else {
+    // Initialize display_order for existing stops if they don't have it
+    const stopsWithoutOrder = db.prepare("SELECT id FROM stops WHERE display_order IS NULL OR display_order = 0 ORDER BY id").all();
+    if (stopsWithoutOrder.length > 0) {
+      const updateStmt = db.prepare("UPDATE stops SET display_order=? WHERE id=?");
+      stopsWithoutOrder.forEach((stop, index) => {
+        updateStmt.run(index, stop.id);
+      });
     }
   }
 }
@@ -95,14 +107,14 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 //  Cache stops 
-let cachedStops = db.prepare("SELECT * FROM stops ORDER BY id").all();
+let cachedStops = db.prepare("SELECT * FROM stops ORDER BY display_order, id").all();
 
 // Cache initial bus state (updated on broadcasts)
 let cachedBusState = db.prepare("SELECT * FROM bus_info WHERE id=1").get();
 
 // Prepared statements for cache updates
 const getStopStmt = db.prepare("SELECT * FROM stops WHERE id=?");
-const getAllStopsStmt = db.prepare("SELECT * FROM stops ORDER BY id");
+const getAllStopsStmt = db.prepare("SELECT * FROM stops ORDER BY display_order, id");
 const getBusStateStmt = db.prepare("SELECT * FROM bus_info WHERE id=1");
 
 // Full cache refresh (use only for add/delete operations)
@@ -283,12 +295,15 @@ app.post("/api/admin/:token/stop-departed", adminAuth, async (req, res) => {
     let nextStop = nextStopOverride || null;
 
     if (!nextStop) {
-      // Find the first stop after current that has no 'arrived' timestamp
+      // Find the current stop's index in the sorted cachedStops
       const currentIndex = cachedStops.findIndex(s => s.id === stopId);
-      for (let i = currentIndex + 1; i < cachedStops.length; i++) {
-        if (!cachedStops[i].arrived) {
-          nextStop = cachedStops[i].id;
-          break;
+      if (currentIndex !== -1) {
+        // Start from the next position in the already-sorted array
+        for (let i = currentIndex + 1; i < cachedStops.length; i++) {
+          if (!cachedStops[i].arrived) {
+            nextStop = cachedStops[i].id;
+            break;
+          }
         }
       }
     }
@@ -321,7 +336,7 @@ app.post("/api/admin/:token/stop-departed", adminAuth, async (req, res) => {
     `).run(nextStop);
 
     // Broadcast updated bus state
-    broadcastBusState({ routeETA });
+    broadcastBusState({ routeETA }); 
 
     res.json({ success: true, eta: routeETA, nextStop });
   } catch (err) {
@@ -383,12 +398,16 @@ app.post("/api/admin/:token/add-stop", adminAuth, async (req, res) => {
     // Compute latitude and longitude
     const { latitude, longitude } = await getLatitudeLongitude(address);
 
+    // Get the max display_order and add 1
+    const maxOrder = db.prepare("SELECT MAX(display_order) as max FROM stops").get();
+    const newDisplayOrder = (maxOrder.max || 0) + 1;
+
     // Insert into database
     const stmt = db.prepare(`
-      INSERT INTO stops (address, latitude, longitude, starting_time, families)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO stops (address, latitude, longitude, starting_time, families, display_order)
+      VALUES (?, ?, ?, ?, ?, ?)
     `);
-    const info = stmt.run(address, latitude, longitude, starting_time || null, JSON.stringify(families || {}));
+    const info = stmt.run(address, latitude, longitude, starting_time || null, JSON.stringify(families || {}), newDisplayOrder);
 
     // Refresh cache and get the new stop
     refreshStopsCache();
@@ -455,6 +474,48 @@ app.post("/api/admin/:token/delete-stop", adminAuth, (req, res) => {
     res.json({ success: true, stopId });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Reorder stops
+app.post("/api/admin/:token/reorder-stops", adminAuth, (req, res) => {
+  try {
+    const { orderedIds } = req.body;
+    if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+      return res.status(400).json({ success: false, error: "Invalid orderedIds" });
+    }
+
+    // console.log('Reordering stops:', orderedIds);
+
+    // Update display_order for each stop based on its position in orderedIds
+    const updateStmt = db.prepare("UPDATE stops SET display_order=? WHERE id=?");
+    const transaction = db.transaction((ids) => {
+      ids.forEach((stopId, index) => {
+        updateStmt.run(index, stopId);
+      });
+    });
+
+    transaction(orderedIds);
+
+    // Refresh cache
+    refreshStopsCache();
+
+    // console.log('Stops reordered successfully, new order:', cachedStops.map(s => s.id));
+
+    // Broadcast the reordered stops
+    const payload = {
+      type: "stops_reordered",
+      stops: cachedStops
+    };
+    const message = JSON.stringify(payload);
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) client.send(message);
+    });
+
+    res.json({ success: true, stops: cachedStops });
+  } catch (err) {
+    console.error('Error reordering stops:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

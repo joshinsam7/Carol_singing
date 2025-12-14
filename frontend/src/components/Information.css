@@ -7,6 +7,9 @@
   max-width: 480px; 
   margin: 0 auto; 
   font-family: Arial, sans-serif;
+  max-height: calc(100vh - 100px); /* Allow container to have max height */
+  overflow-y: auto;    /* Enable vertical scrolling */
+  overflow-x: hidden;  /* Prevent horizontal scroll */
 }
 
 /* Each card */
@@ -28,6 +31,10 @@
 /* Left side check circle */
 .info-left {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .check-circle {
@@ -41,6 +48,40 @@
   justify-content: center;
   font-weight: bold;
   font-size: 18px;
+}
+
+/* Drag handle hamburger icon */
+.drag-handle {
+  font-size: 28px;
+  color: #666;
+  cursor: grab;
+  padding: 6px 8px;
+  user-select: none;
+  -webkit-user-select: none;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.drag-handle {
+  touch-action: none;     /* 👈 ONLY here */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+
+.drag-handle:active {
+  cursor: grabbing;
+  color: #333;
+  font-weight: bold;
+}
+
+.draggable-stop:active .drag-handle {
+  color: #000;
+  font-weight: bold;
 }
 
 /* Title of the location */
@@ -201,4 +242,79 @@
   display: flex; /* Enables flexbox layout */
   justify-content: center; /* Centers children horizontally */
   align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Drag and drop styles */
+.draggable-stop {
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.draggable-stop:active {
+  opacity: 0.8;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  transform: scale(1.05);
+}
+
+/* Dragged card - shows entire card being moved with visual feedback */
+.dragged-card {
+  opacity: 0.4 !important;
+  background-color: #e8e8e8 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+  transform: scale(0.98) !important;
+  border: 2px solid rgba(153, 153, 153, 0.5);
+}
+
+.draggable-stop:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Save button styling */
+.save-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.save-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Disable scroll during drag on touch devices */
+.information.dragging {
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+/* Mobile drag - show card being moved with stronger visual feedback */
+.information.dragging .draggable-stop.dragged-card {
+  opacity: 0.35;
+  background-color: rgba(200, 200, 200, 0.8);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(100, 100, 100, 0.5);
+  transform: scale(0.96) !important;
+}
+
+.admin-button {
+  transition: all 0.2s ease;
+}
+
+.admin-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }

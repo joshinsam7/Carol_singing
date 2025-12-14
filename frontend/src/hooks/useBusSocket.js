@@ -82,6 +82,21 @@ export default function useBusSocket(initialStops = []) {
             ),
           );
         }
+
+        // Handle stops reordered event
+        if (parsed.type === "stops_reordered") {
+          const reorderedStops = parsed.stops.map(stop => ({
+            ...stop,
+            arrivalTime: stop.arrived ? Number(stop.arrived) : null
+          }));
+          setStops(reorderedStops);
+        }
+
+        // Handle stop removed event
+        if (parsed.type === "stop_removed") {
+          const {stopId} = parsed;
+          setStops((prevStops) => prevStops.filter(s => s.id !== stopId));
+        }
       } catch (err) {
         console.error("WebSocket parsing error:", err);
       }

@@ -300,6 +300,9 @@ const handleSaveStop = async () => {
             adminEndpoint={adminEndpoint}
             onAddStop={() => setShowAddPopup(true)}
             onRemoveStop={() => setShowRemovePopup(true)}
+            onReorderSave={(reorderedStops) => setStops(reorderedStops)}
+            apiUrl={API_URL}
+            token={token}
           />
         </aside>
 

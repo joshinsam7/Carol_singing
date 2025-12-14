@@ -68,7 +68,9 @@ export default function Summary({
       body: JSON.stringify({stopId, timestamp: Date.now()}),
     })
       .then(res => res.json())
-      .then(data => console.log("Arrived:", data))
+      .then(
+        // data => console.log("Arrived:", data)
+      )
       .catch(err => console.error("Error marking arrived:", err));
   };
 
@@ -83,7 +85,9 @@ export default function Summary({
       body: JSON.stringify({stopId, timestamp: Date.now()}),
     })
       .then(res => res.json())
-      .then(data => console.log("Departed:", data))
+      .then(
+        // data => console.log("Departed:", data)
+      )
       .catch(err => console.error("Error marking departed:", err));
   };
 
@@ -98,7 +102,7 @@ export default function Summary({
     })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Set next stop:", data);
+          // console.log("Set next stop:", data);
           // Reset select after successful override
           e.target.value = "";
         })

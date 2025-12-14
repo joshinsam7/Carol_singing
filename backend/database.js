@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS stops (
     starting_time TEXT,
     families TEXT,
     notes TEXT,
-    tag TEXT
+    tag TEXT,
+    display_order INTEGER DEFAULT 0
 );
 `);
 
@@ -36,6 +37,20 @@ CREATE TABLE IF NOT EXISTS stops (
 const row = db.prepare("SELECT COUNT(*) AS count FROM bus_info").get();
 if (row.count === 0) {
   db.prepare("INSERT INTO bus_info (lat, lng) VALUES (?, ?)").run(29.619707, -95.3193855);
+}
+
+// Add display_order column if it doesn't exist (migration)
+try {
+  const columns = db.prepare("PRAGMA table_info(stops)").all();
+  const hasDisplayOrder = columns.some(col => col.name === 'display_order');
+  
+  if (!hasDisplayOrder) {
+    // console.log('Adding display_order column to stops table...');
+    db.exec('ALTER TABLE stops ADD COLUMN display_order INTEGER DEFAULT 0');
+    // console.log('display_order column added successfully');
+  }
+} catch (err) {
+  console.error('Error checking/adding display_order column:', err);
 }
 
 module.exports = db;
