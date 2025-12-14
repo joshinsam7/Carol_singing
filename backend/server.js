@@ -29,10 +29,10 @@ const ADMIN_ROUTE_TOKEN = process.env.ADMIN_ROUTE_TOKEN;
 
 //  Middleware 
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://192.168.1.207:3000',
-  'http://192.168.1.207:3001',
+  // 'http://localhost:3000',
+  // 'http://localhost:3001',
+  // 'http://192.168.1.207:3000',
+  // 'http://192.168.1.207:3001',
   'https://carol-tracker-hs3m.onrender.com',
   'https://trinity-ys-caroling.netlify.app'
 ];
