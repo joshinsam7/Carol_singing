@@ -82,26 +82,16 @@
         },
         "8": {
             "families": {
-                "nan": "Eason Thomas & Rachel Eason"
-            },
-            "address": "13530 Treshill Court, Houston, TX 77049",
-            "latitude": 29.8035024,
-            "longitude": -95.16551,
-            "Arrived": null,
-            "Departure": null
-        },
-        "9": {
-            "families": {
                 "nan": "Thomas P. & Deenamma Mathew (Raju & Joyamma)"
             },
-            "address": "526 Majestic Ridge Drive, Houston, TX 77049",
+            "address": "15807 Lecht Dr Humble TX 77346",
             "latitude": 29.8212181,
             "longitude": -95.1753962,
             "Arrived": null,
             "Departure": null
         }
     },
-    "nextStopId": 10,
+    "nextStopId": 9,
     "tripStarted": false,
     "currentStop": -1,
     "nextStop": 0,
