@@ -2,196 +2,136 @@
     "stops": {
         "0": {
             "families": {
-                "nan": "Tony & Mani K Varghese (Join family: John & Leelamma K Thomas)"
+                "280": "Jose Samuel (Jose & Ancy)"
             },
-            "address": "9415 Mount Logan, Missouri City, TX 77459",
-            "latitude": 29.4827989,
-            "longitude": -95.526663,
+            "address": "12247 Ashford Valley Drive, Sugar Land, TX 77478",
+            "latitude": 29.6575714,
+            "longitude": -95.5999192,
             "Arrived": null,
             "Departure": null
         },
         "1": {
             "families": {
-                "nan": "Lejo & Ozioma Abraham"
+                "354": "P. T. Varghese (Babu & Rosamma)"
             },
-            "address": "1319 Crown Forest Dr, Missouri City, TX 77459",
-            "latitude": 29.462427,
-            "longitude": -95.51828,
+            "address": "14714 Wynbourn Way, Houston, TX 77083",
+            "latitude": 29.6770955,
+            "longitude": -95.6482018,
             "Arrived": null,
             "Departure": null
         },
         "2": {
             "families": {
-                "nan": "Tinu & Swapana Cherian"
+                "430": "Robin George (Robin & Lithy)"
             },
-            "address": "54 Big Trail, Missouri City, TX 77459",
-            "latitude": 29.5128262,
-            "longitude": -95.5402601,
+            "address": "17619 Astrachan Road, Richmond, TX",
+            "latitude": 29.6602505,
+            "longitude": -95.6942911,
             "Arrived": null,
             "Departure": null
         },
         "3": {
             "families": {
-                "nan": "Siju Abraham & Seena Koshy"
+                "471": "Jimmy Thomas (Jimmy & Moji)"
             },
-            "address": "5511 Pecan Field Dr, Missouri City, TX 77459",
-            "latitude": 29.5264117,
-            "longitude": -95.5512943,
+            "address": "10931 Colinton Drive, Richmond, TX 77407",
+            "latitude": 29.6561015,
+            "longitude": -95.6796726,
             "Arrived": null,
             "Departure": null
         },
         "4": {
             "families": {
-                "nan": "Saju & Mareena Philip"
+                "161": "Annie Mathews (Moni)"
             },
-            "address": "6915 Pine Top Lane, Missouri City, TX 77459",
-            "latitude": 29.5327623,
-            "longitude": -95.5603626,
+            "address": "3027 Shady Ridge Trail, Sugar Land, TX 77478",
+            "latitude": 29.6362055,
+            "longitude": -95.6760245,
             "Arrived": null,
             "Departure": null
         },
         "5": {
             "families": {
-                "nan": "Tom & Kunjama Thomas (Join family: Tony & Geetha)"
+                "230": "Kunjukunju John (Kunjumon & Jolly)"
             },
-            "address": "5930 Turkey Creek, Missouri City, TX 77459",
-            "latitude": 29.5307157,
-            "longitude": -95.5537878,
+            "address": "7110 Adobe Meadows Court, Sugar Land, TX 77479",
+            "latitude": 29.5882268,
+            "longitude": -95.6718152,
             "Arrived": null,
             "Departure": null
         },
         "6": {
             "families": {
-                "nan": "Randy & Jisha Thomas"
+                "296": "Sanju Mathew John (Sanju & Bindu)"
             },
-            "address": "4618 Millstone Canyon Ln, Sugar Land, TX 77479",
-            "latitude": 29.5267592,
-            "longitude": -95.5672809,
+            "address": "614 Hollington Way, Sugar Land, TX 77479",
+            "latitude": 29.5997563,
+            "longitude": -95.6560707,
             "Arrived": null,
             "Departure": null
         },
         "7": {
             "families": {
-                "nan": "V P & Vijayamma Mathew"
+                "555": "Varughese Mathew (Shaji & Elsy)"
             },
-            "address": "3838 Parkside Dr, Missouri City, TX 77459",
-            "latitude": 29.5698705,
-            "longitude": -95.5751308,
+            "address": "5935 Quiet Point Lane, Sugar Land, TX 77479",
+            "latitude": 29.5376813,
+            "longitude": -95.5663571,
             "Arrived": null,
             "Departure": null
         },
         "8": {
             "families": {
-                "nan": "John & Kunjumol Philip"
+                "502": "Vibin Zachariah (Vibin & Betsy) / Alexander Varghese (Alex & Alice)"
             },
-            "address": "6907 Oak Bay Circle, Missouri City, TX 77459",
-            "latitude": 29.5531716,
-            "longitude": -95.5659614,
+            "address": "4019 Scenic Valley Lane, Sugar Land, TX 77479",
+            "latitude": 29.5394841,
+            "longitude": -95.5685717,
             "Arrived": null,
             "Departure": null
         },
         "9": {
             "families": {
-                "nan": "Johnson & Preethi Mathew (Join family: N M & Alice Mathew)"
+                "340": "Shajan George (Shajan & Sheela) / George Samuel (Aniyankunju & Seena)"
             },
-            "address": "3406 Canton Hill Ln, Missouri City, TX 77459",
-            "latitude": 29.5416806,
-            "longitude": -95.5595276,
+            "address": "5106 Heath River Lane, Sugar Land, TX 77479",
+            "latitude": 29.5502041,
+            "longitude": -95.5652367,
             "Arrived": null,
             "Departure": null
         },
         "10": {
             "families": {
-                "nan": "Jibu Mathew & Aileen Korulla (Join family: Korulla Kuirakose)"
+                "236": "Abraham Joseph (Jose & Molly)"
             },
-            "address": "3418 Andover Trace Ln, Missouri City, TX 77459",
-            "latitude": 29.5434572,
-            "longitude": -95.5576785,
+            "address": "5511 Pointed Leaf Drive, Missouri City, TX 77459",
+            "latitude": 29.5260466,
+            "longitude": -95.5522113,
             "Arrived": null,
             "Departure": null
         },
         "11": {
             "families": {
-                "nan": "Abraham Mathew(Anand) & Rekha Abraham"
+                "300": "Stevenson Thomas (Tobi & Joyce)"
             },
-            "address": "3630 Diamond Creek Dr, Missouri City, TX 77459",
-            "latitude": 29.5520026,
-            "longitude": -95.5176726,
+            "address": "2 Augusto Court, Missouri City, TX 77459",
+            "latitude": 29.5108386,
+            "longitude": -95.5473173,
             "Arrived": null,
             "Departure": null
         },
         "12": {
             "families": {
-                "nan": "Jaiju & Lalu J. Kuruvilla"
+                "122": "Reji George (Reji & Leena) / Kunjamma George"
             },
-            "address": "2314 Palm Harbour Dr, Missouri City, TX 77459",
-            "latitude": 29.5468696,
-            "longitude": -95.5272735,
-            "Arrived": null,
-            "Departure": null
-        },
-        "13": {
-            "families": {
-                "nan": "C M & Thankamma Mathew"
-            },
-            "address": "2619 Blue Abbot Dr, Fresno, TX 77545",
-            "latitude": 29.519725,
-            "longitude": -95.4946084,
-            "Arrived": null,
-            "Departure": null
-        },
-        "14": {
-            "families": {
-                "nan": "James Eappen"
-            },
-            "address": "3718 Ramble Creek Dr, Missouri City, TX 77459",
-            "latitude": 29.5309351,
-            "longitude": -95.5278055,
-            "Arrived": null,
-            "Departure": null
-        },
-        "15": {
-            "families": {
-                "nan": "Alwin & Leeja Thomas"
-            },
-            "address": "4631 Peregrine Way, Missouri City, TX 77459",
-            "latitude": 29.5175257,
-            "longitude": -95.5414239,
-            "Arrived": null,
-            "Departure": null
-        },
-        "16": {
-            "families": {
-                "nan": "Manesh & Jeena Mathew"
-            },
-            "address": "5522 Raintree Dr, Missouri City, TX 77459",
-            "latitude": 29.5175166,
-            "longitude": -95.544892,
-            "Arrived": null,
-            "Departure": null
-        },
-        "17": {
-            "families": {
-                "nan": "Thomas & Molly Koshy"
-            },
-            "address": "4806 Arrowhead Lakes Dr, Missouri City, TX 77459",
-            "latitude": 29.5218706,
-            "longitude": -95.5263954,
-            "Arrived": null,
-            "Departure": null
-        },
-        "18": {
-            "families": {
-                "nan": "Jaison & Gina Samuel"
-            },
-            "address": "4427 Durnago Bnd Missouri City, TX 77459",
-            "latitude": 29.5136051,
-            "longitude": -95.5211504,
+            "address": "11 Iron Rise Court, Missouri City, TX 77459",
+            "latitude": 29.5202931,
+            "longitude": -95.5467199,
             "Arrived": null,
             "Departure": null
         }
     },
-    "nextStopId": 19,
+    "nextStopId": 13,
     "tripStarted": false,
     "currentStop": -1,
     "nextStop": 0,
