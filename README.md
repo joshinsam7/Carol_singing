@@ -241,7 +241,6 @@ display_order   INTEGER (sort order for UI)
    ```
    NODE_ENV=production
    ADMIN_ROUTE_TOKEN=your_secure_random_token_here
-   OWNTRACKS_API_TOKEN=your_owntracks_token_optional
    ```
 
    **Generate a secure token** (example using OpenSSL):
